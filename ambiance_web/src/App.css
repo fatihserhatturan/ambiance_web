@@ -1,0 +1,24 @@
+/* Reset default vite styles */
+#root {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+  height: 100vh;
+}
+
+.app-shell {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background: #0a0704;
+  overflow: hidden;
+  position: relative;
+}
+
+.scene-viewport {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}

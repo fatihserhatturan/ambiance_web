@@ -1,0 +1,208 @@
+.fireplace-wrap {
+  position: relative;
+  width: calc(220px * var(--size));
+  height: calc(260px * var(--size));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Outer ambient glow on the floor/wall */
+.ambient-glow {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 340px;
+  height: 120px;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 140, 40, var(--glow-opacity)) 0%, transparent 70%);
+  pointer-events: none;
+  animation: glowPulse calc(var(--speed) * 1.4) ease-in-out infinite alternate;
+}
+
+/* Stone frame */
+.fireplace-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fireplace-mantel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 18px;
+  background: linear-gradient(180deg, #5a4a3a 0%, #3d3028 100%);
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+/* Firebox area */
+.fireplace-box {
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  top: 18px;
+  background: linear-gradient(180deg, #0d0805 0%, #1a0f08 50%, #0a0604 100%);
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  border: 2px solid #2a1f16;
+  border-top: none;
+}
+
+/* Floor glow inside box */
+.fireplace-floor-glow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 120, 20, 0.4) 0%, transparent 70%);
+  animation: glowPulse var(--speed) ease-in-out infinite alternate;
+}
+
+/* Ember bed at bottom */
+.ember-bed {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: linear-gradient(180deg, transparent 0%, rgba(180, 60, 10, 0.6) 100%);
+}
+
+.ember {
+  position: absolute;
+  bottom: calc(2px + (var(--i) * 1.5px));
+  left: calc(8% + (var(--i) * 11%));
+  width:  calc(6px + mod(var(--i) * 2, 8) * 1px);  /* ✅ mod() */
+  height: calc(4px + mod(var(--i) * 1, 5) * 1px);  /* ✅ mod() */
+  background: radial-gradient(
+    circle,
+    #ffaa00 0%,
+    #ff5500 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: emberGlow
+    calc(var(--speed) * 0.7 * 1s)   /* ✅ birim güvencesi */
+    ease-in-out
+    calc(var(--i) * 0.13s)
+    infinite
+    alternate;
+}
+
+/* Flame container */
+.flames {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  height: 80%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* Individual flame */
+.flame {
+  position: absolute;
+  bottom: 0;
+  left: calc(10% + (var(--fi) / var(--ftotal)) * 70%);
+  width: calc(28% - (var(--fi) * 2%));
+  height: calc(55% + mod(var(--fi), 3) * 15%); /* ✅ mod() */
+  transform-origin: bottom center;
+  background: radial-gradient(
+    ellipse 60% 100% at 50% 100%,
+    #fff5c0 0%,
+    #ffcc00 15%,
+    #ff8800 40%,
+    #ff4400 65%,
+    rgba(200, 30, 0, 0.6) 85%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 20% 20% / 80% 80% 20% 20%;
+  mix-blend-mode: screen; /* ✅ filter ayrı wrapper'a taşındı */
+  opacity: 0.85;
+  animation: flameDance
+    calc((var(--speed) * (0.8 + var(--fi) * 0.12)) * 1s) /* ✅ */
+    ease-in-out
+    calc(var(--fi) * 0.17s)
+    infinite
+    alternate;
+}
+
+/* Blur için wrapper */
+.flame-wrapper {
+  filter: blur(3px); /* ✅ blend mode ile ayrıldı */
+}
+
+/* Brighter core on every other flame */
+.flame:nth-child(odd)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  right: 15%;
+  height: 50%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 255, 220, 0.8) 0%, transparent 70%);
+  border-radius: inherit;
+  filter: blur(2px);
+}
+
+.heat-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 4px,
+    rgba(255, 160, 40, 0.03) 4px,
+    rgba(255, 160, 40, 0.03) 5px
+  );
+  animation: shimmer calc(var(--speed) * 0.5) linear infinite;
+  pointer-events: none;
+}
+
+/* --- Keyframes --- */
+@keyframes flameDance {
+  0% {
+    transform: scaleX(1) scaleY(1) rotate(-3deg);
+    opacity: 0.8;
+  }
+  33% {
+    transform: scaleX(0.88) scaleY(1.08) rotate(2deg);
+    opacity: 0.9;
+  }
+  66% {
+    transform: scaleX(1.06) scaleY(0.95) rotate(-1deg);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scaleX(0.94) scaleY(1.04) rotate(4deg);
+    opacity: 0.95;
+  }
+}
+
+@keyframes glowPulse {
+  from { opacity: 0.7; transform: translateX(-50%) scaleX(0.95); }
+  to   { opacity: 1.0; transform: translateX(-50%) scaleX(1.05); }
+}
+
+@keyframes emberGlow {
+  from { opacity: 0.4; transform: scale(0.8); }
+  to   { opacity: 1.0; transform: scale(1.2); }
+}
+
+@keyframes shimmer {
+  from { background-position: 0 0; }
+  to   { background-position: 0 40px; }
+}
