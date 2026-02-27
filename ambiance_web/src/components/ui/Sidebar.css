@@ -362,3 +362,56 @@
   border: 1px dashed rgba(160, 110, 50, 0.15);
   border-radius: 6px;
 }
+/* ─── Audio layer list (AudioPanel) ─── */
+.audio-layers {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.audio-layer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: rgba(30, 22, 12, 0.5);
+  border: 1px solid rgba(160, 110, 50, 0.12);
+  border-radius: 6px;
+}
+
+.audio-layer-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(160, 130, 80, 0.3);
+  flex-shrink: 0;
+}
+
+.audio-layer-dot.playing {
+  background: rgba(120, 220, 100, 0.8);
+  box-shadow: 0 0 6px rgba(120, 220, 100, 0.5);
+  animation: dotPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes dotPulse {
+  from { opacity: 0.6; }
+  to   { opacity: 1.0; }
+}
+
+.audio-layer-name {
+  flex: 1;
+  font-size: 12px;
+  color: rgba(210, 180, 120, 0.85);
+  font-family: 'Georgia', serif;
+}
+
+.audio-layer-badge {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(160, 130, 80, 0.5);
+  background: rgba(160, 110, 50, 0.1);
+  border: 1px solid rgba(160, 110, 50, 0.2);
+  border-radius: 3px;
+  padding: 1px 5px;
+}

@@ -27,9 +27,9 @@ export default function Sidebar() {
         {/* Tab nav */}
         <nav className="sidebar-tabs">
           {[
-            { id: 'backgrounds', label: 'Scenes', icon: '🪟' },
-            { id: 'assets',      label: 'Objects', icon: '✨' },
-            { id: 'audio',       label: 'Audio',  icon: '🔊' },
+            { id: 'backgrounds', label: 'Scenes',   icon: '🪟' },
+            { id: 'assets',      label: 'Objects',   icon: '✨' },
+            { id: 'audio',       label: 'Audio',     icon: '🔊' },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -160,17 +160,24 @@ function AssetsPanel() {
 
 // ─── Audio panel ─────────────────────────────────────
 function AudioPanel() {
-  const audioVolume = useSceneStore((s) => s.audioVolume)
-  const audioMuted = useSceneStore((s) => s.audioMuted)
-  const setAudioVolume = useSceneStore((s) => s.setAudioVolume)
-  const toggleMute = useSceneStore((s) => s.toggleMute)
+  const audioVolume      = useSceneStore((s) => s.audioVolume)
+  const audioMuted       = useSceneStore((s) => s.audioMuted)
+  const activeBackground = useSceneStore((s) => s.activeBackground)
+  const sceneAssets      = useSceneStore((s) => s.sceneAssets)
+  const setAudioVolume   = useSceneStore((s) => s.setAudioVolume)
+  const toggleMute       = useSceneStore((s) => s.toggleMute)
+
+  // Collect currently active sounds for display
+  const activeBg = BACKGROUNDS.find((b) => b.id === activeBackground)
+  const activeAssetSounds = sceneAssets.filter((a) => a.hasSound && a.settings?.sound !== false)
 
   return (
     <div className="panel-section">
       <p className="panel-hint">Ambient soundscape controls</p>
 
+      {/* Master volume */}
       <div className="audio-master">
-        <button className="mute-btn" onClick={toggleMute}>
+        <button className="mute-btn" onClick={toggleMute} title={audioMuted ? 'Unmute' : 'Mute'}>
           {audioMuted ? '🔇' : '🔊'}
         </button>
         <input
@@ -184,8 +191,36 @@ function AudioPanel() {
         </span>
       </div>
 
-      <p className="panel-coming-soon">
-        🎵 Audio mixing coming soon — each sound layer will be individually controllable
+      {/* Active layers */}
+      <p className="panel-hint" style={{ marginTop: '16px' }}>Now playing</p>
+      <div className="audio-layers">
+        {/* Background ambient */}
+        {activeBg && (
+          <div className="audio-layer-row">
+            <span className="audio-layer-dot playing" />
+            <span className="audio-layer-name">{activeBg.label} — ambient</span>
+            <span className="audio-layer-badge">bg</span>
+          </div>
+        )}
+
+        {/* Asset sounds */}
+        {activeAssetSounds.length === 0 && (
+          <div className="audio-layer-row muted-row">
+            <span className="audio-layer-dot" />
+            <span className="audio-layer-name" style={{ opacity: 0.4 }}>No object sounds active</span>
+          </div>
+        )}
+        {activeAssetSounds.map((a) => (
+          <div key={a.instanceId} className="audio-layer-row">
+            <span className="audio-layer-dot playing" />
+            <span className="audio-layer-name">{a.label}</span>
+            <span className="audio-layer-badge">obj</span>
+          </div>
+        ))}
+      </div>
+
+      <p className="panel-hint" style={{ marginTop: '16px', fontSize: '10px', opacity: 0.5 }}>
+        Click anywhere on the scene to start audio
       </p>
     </div>
   )

@@ -1,8 +1,11 @@
 import SceneCanvas from './components/Scene/SceneCanvas'
 import Sidebar from './components/UI/Sidebar'
+import { useAudioManager } from './hooks/useAudioManager'
 import './App.css'
 
 export default function App() {
+  useAudioManager()
+
   return (
     <div className="app-shell">
       {/* Main scene viewport */}
