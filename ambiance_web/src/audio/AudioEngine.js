@@ -1,7 +1,7 @@
 /**
  * Procedural ambient sound engine — Web Audio API only, no files needed.
  * Generates looping filtered noise shaped for each background/asset.
- * Multi-layer synthesis for realistic, professional-grade soundscapes.
+ * Multi-layer synthesis with per-channel gain control, crossfade, and VU metering.
  */
 
 // ─── Noise buffer generators ───────────────────────────────────────────────
@@ -52,89 +52,89 @@ const CONFIGS = {
   'forest-night': [
     { noiseType:'brown', filterType:'lowpass',  filterFreq:280,  filterQ:0.6, gain:0.18, lfo:{ rate:0.04, depth:0.30 } },
     { noiseType:'brown', filterType:'bandpass', filterFreq:160,  filterQ:1.4, gain:0.09, lfo:{ rate:0.08, depth:0.55 } },
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:3800, filterQ:6.0, gain:0.04, lfo:{ rate:0.85, depth:0.90 } }, // cırcır böceği
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:5200, filterQ:8.0, gain:0.025,lfo:{ rate:1.20, depth:0.95 } }, // yüksek frekans böcek
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:80,   filterQ:0.4, gain:0.06, lfo:{ rate:0.02, depth:0.20 } }, // derin orman tabanı
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:3800, filterQ:6.0, gain:0.04, lfo:{ rate:0.85, depth:0.90 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:5200, filterQ:8.0, gain:0.025,lfo:{ rate:1.20, depth:0.95 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:80,   filterQ:0.4, gain:0.06, lfo:{ rate:0.02, depth:0.20 } },
   ],
 
   // Kış fırtınası: uluyan rüzgar, tipi, derin gürültü
   'winter-wind': [
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:680,  filterQ:0.5, gain:0.22, lfo:{ rate:0.12, depth:0.65 } }, // ana rüzgar
-    { noiseType:'white', filterType:'highpass', filterFreq:1800, filterQ:0.3, gain:0.06, lfo:{ rate:0.22, depth:0.45 } }, // ıslık
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:180,  filterQ:0.7, gain:0.12, lfo:{ rate:0.05, depth:0.35 } }, // derin tipi
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:1400, filterQ:1.2, gain:0.08, lfo:{ rate:0.30, depth:0.55 } }, // rüzgar hamleleri
-    { noiseType:'white', filterType:'bandpass', filterFreq:3500, filterQ:0.8, gain:0.03, lfo:{ rate:0.45, depth:0.60 } }, // ince uğultu
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:680,  filterQ:0.5, gain:0.22, lfo:{ rate:0.12, depth:0.65 } },
+    { noiseType:'white', filterType:'highpass', filterFreq:1800, filterQ:0.3, gain:0.06, lfo:{ rate:0.22, depth:0.45 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:180,  filterQ:0.7, gain:0.12, lfo:{ rate:0.05, depth:0.35 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:1400, filterQ:1.2, gain:0.08, lfo:{ rate:0.30, depth:0.55 } },
+    { noiseType:'white', filterType:'bandpass', filterFreq:3500, filterQ:0.8, gain:0.03, lfo:{ rate:0.45, depth:0.60 } },
   ],
 
   // Yağmurlu şehir: sürekli yağmur, şehir uğultusu, su birikintisi
   'rain-city': [
-    { noiseType:'white', filterType:'lowpass',  filterFreq:2200, filterQ:0.4, gain:0.15, lfo:{ rate:0.18, depth:0.12 } }, // sürekli yağmur
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:140,  filterQ:0.9, gain:0.10, lfo:{ rate:0.06, depth:0.28 } }, // uzak şehir
-    { noiseType:'white', filterType:'bandpass', filterFreq:750,  filterQ:1.5, gain:0.07, lfo:{ rate:0.14, depth:0.22 } }, // yağmur yoğunluğu
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:300,  filterQ:0.8, gain:0.06, lfo:{ rate:0.09, depth:0.32 } }, // su birikintisi
-    { noiseType:'brown', filterType:'bandpass', filterFreq:60,   filterQ:2.0, gain:0.04, lfo:{ rate:0.03, depth:0.40 } }, // metro/tünel altyapısı
+    { noiseType:'white', filterType:'lowpass',  filterFreq:2200, filterQ:0.4, gain:0.15, lfo:{ rate:0.18, depth:0.12 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:140,  filterQ:0.9, gain:0.10, lfo:{ rate:0.06, depth:0.28 } },
+    { noiseType:'white', filterType:'bandpass', filterFreq:750,  filterQ:1.5, gain:0.07, lfo:{ rate:0.14, depth:0.22 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:300,  filterQ:0.8, gain:0.06, lfo:{ rate:0.09, depth:0.32 } },
+    { noiseType:'brown', filterType:'bandpass', filterFreq:60,   filterQ:2.0, gain:0.04, lfo:{ rate:0.03, depth:0.40 } },
   ],
 
   // Sonbahar: yaprak hışırtısı, esinti, dallar
   'autumn-wind': [
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:480,  filterQ:0.7, gain:0.17, lfo:{ rate:0.07, depth:0.48 } }, // esinti tabanı
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:230,  filterQ:0.5, gain:0.10, lfo:{ rate:0.03, depth:0.32 } }, // derin katman
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:2100, filterQ:2.5, gain:0.06, lfo:{ rate:0.16, depth:0.60 } }, // yaprak hışırtısı
-    { noiseType:'white', filterType:'bandpass', filterFreq:1400, filterQ:1.8, gain:0.05, lfo:{ rate:0.13, depth:0.40 } }, // dönen yapraklar
-    { noiseType:'pink',  filterType:'highpass', filterFreq:3000, filterQ:0.6, gain:0.025,lfo:{ rate:0.24, depth:0.50 } }, // ince yüksek frekans
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:480,  filterQ:0.7, gain:0.17, lfo:{ rate:0.07, depth:0.48 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:230,  filterQ:0.5, gain:0.10, lfo:{ rate:0.03, depth:0.32 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:2100, filterQ:2.5, gain:0.06, lfo:{ rate:0.16, depth:0.60 } },
+    { noiseType:'white', filterType:'bandpass', filterFreq:1400, filterQ:1.8, gain:0.05, lfo:{ rate:0.13, depth:0.40 } },
+    { noiseType:'pink',  filterType:'highpass', filterFreq:3000, filterQ:0.6, gain:0.025,lfo:{ rate:0.24, depth:0.50 } },
   ],
 
   // Okyanus kıyısı: dalgalar, köpük, derin deniz uğultusu
   'ocean-coast': [
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:180,  filterQ:0.5, gain:0.22, lfo:{ rate:0.06, depth:0.70 } }, // derin dalga tabanı
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:550,  filterQ:0.6, gain:0.16, lfo:{ rate:0.08, depth:0.65 } }, // dalga ortası
-    { noiseType:'white', filterType:'bandpass', filterFreq:2800, filterQ:0.7, gain:0.08, lfo:{ rate:0.12, depth:0.55 } }, // köpük/sıçrama
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:75,   filterQ:0.4, gain:0.14, lfo:{ rate:0.03, depth:0.45 } }, // derin okyanus
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:1200, filterQ:1.0, gain:0.06, lfo:{ rate:0.10, depth:0.50 } }, // çekilen su
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:180,  filterQ:0.5, gain:0.22, lfo:{ rate:0.06, depth:0.70 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:550,  filterQ:0.6, gain:0.16, lfo:{ rate:0.08, depth:0.65 } },
+    { noiseType:'white', filterType:'bandpass', filterFreq:2800, filterQ:0.7, gain:0.08, lfo:{ rate:0.12, depth:0.55 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:75,   filterQ:0.4, gain:0.14, lfo:{ rate:0.03, depth:0.45 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:1200, filterQ:1.0, gain:0.06, lfo:{ rate:0.10, depth:0.50 } },
   ],
 
   // Gök gürültülü fırtına: yoğun yağmur, gürültü, şimşek
   'thunderstorm': [
-    { noiseType:'white', filterType:'lowpass',  filterFreq:3200, filterQ:0.4, gain:0.18, lfo:{ rate:0.28, depth:0.18 } }, // yoğun yağmur
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:70,   filterQ:1.5, gain:0.20, lfo:{ rate:0.04, depth:0.75 } }, // gök gürültüsü tabanı
-    { noiseType:'brown', filterType:'bandpass', filterFreq:110,  filterQ:1.2, gain:0.14, lfo:{ rate:0.06, depth:0.60 } }, // gürültü gövdesi
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:1000, filterQ:0.9, gain:0.08, lfo:{ rate:0.20, depth:0.40 } }, // yağmur yoğunluğu
-    { noiseType:'white', filterType:'highpass', filterFreq:4000, filterQ:0.5, gain:0.04, lfo:{ rate:0.50, depth:0.30 } }, // çok ince ayrıntı
+    { noiseType:'white', filterType:'lowpass',  filterFreq:3200, filterQ:0.4, gain:0.18, lfo:{ rate:0.28, depth:0.18 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:70,   filterQ:1.5, gain:0.20, lfo:{ rate:0.04, depth:0.75 } },
+    { noiseType:'brown', filterType:'bandpass', filterFreq:110,  filterQ:1.2, gain:0.14, lfo:{ rate:0.06, depth:0.60 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:1000, filterQ:0.9, gain:0.08, lfo:{ rate:0.20, depth:0.40 } },
+    { noiseType:'white', filterType:'highpass', filterFreq:4000, filterQ:0.5, gain:0.04, lfo:{ rate:0.50, depth:0.30 } },
   ],
 
   // Kafe: fısıltı, kahve makinesi, bardak
   'coffee-shop': [
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:380,  filterQ:0.6, gain:0.14, lfo:{ rate:0.04, depth:0.28 } }, // sohbet mırıltısı
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:180,  filterQ:0.7, gain:0.12, lfo:{ rate:0.02, depth:0.18 } }, // oda ambiyansı
-    { noiseType:'white', filterType:'bandpass', filterFreq:1800, filterQ:2.0, gain:0.05, lfo:{ rate:0.15, depth:0.55 } }, // bardak/tabak şıkırtısı
-    { noiseType:'pink',  filterType:'highpass', filterFreq:1200, filterQ:0.8, gain:0.04, lfo:{ rate:0.08, depth:0.35 } }, // yüksek frekans aktivite
-    { noiseType:'brown', filterType:'bandpass', filterFreq:80,   filterQ:1.5, gain:0.06, lfo:{ rate:0.01, depth:0.15 } }, // derin oda tonu
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:380,  filterQ:0.6, gain:0.14, lfo:{ rate:0.04, depth:0.28 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:180,  filterQ:0.7, gain:0.12, lfo:{ rate:0.02, depth:0.18 } },
+    { noiseType:'white', filterType:'bandpass', filterFreq:1800, filterQ:2.0, gain:0.05, lfo:{ rate:0.15, depth:0.55 } },
+    { noiseType:'pink',  filterType:'highpass', filterFreq:1200, filterQ:0.8, gain:0.04, lfo:{ rate:0.08, depth:0.35 } },
+    { noiseType:'brown', filterType:'bandpass', filterFreq:80,   filterQ:1.5, gain:0.06, lfo:{ rate:0.01, depth:0.15 } },
   ],
 
   // Dağ zirvesi: yüksek irtifada rüzgar, ince hava
   'mountain-peak': [
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:1100, filterQ:0.5, gain:0.20, lfo:{ rate:0.18, depth:0.65 } }, // yüksek rüzgar
-    { noiseType:'white', filterType:'highpass', filterFreq:2800, filterQ:0.3, gain:0.07, lfo:{ rate:0.35, depth:0.55 } }, // ince hava ıslığı
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:140,  filterQ:0.6, gain:0.10, lfo:{ rate:0.04, depth:0.30 } }, // dağ uğultusu
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:600,  filterQ:1.2, gain:0.08, lfo:{ rate:0.25, depth:0.70 } }, // rüzgar hamleleri
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:1100, filterQ:0.5, gain:0.20, lfo:{ rate:0.18, depth:0.65 } },
+    { noiseType:'white', filterType:'highpass', filterFreq:2800, filterQ:0.3, gain:0.07, lfo:{ rate:0.35, depth:0.55 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:140,  filterQ:0.6, gain:0.10, lfo:{ rate:0.04, depth:0.30 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:600,  filterQ:1.2, gain:0.08, lfo:{ rate:0.25, depth:0.70 } },
   ],
 
   // Japon bahçesi: rüzgar, bambu, huzur
   'japanese-garden': [
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:280,  filterQ:0.5, gain:0.12, lfo:{ rate:0.02, depth:0.18 } }, // sakin taban
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:750,  filterQ:0.8, gain:0.10, lfo:{ rate:0.05, depth:0.40 } }, // hafif esinti
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:2400, filterQ:3.5, gain:0.05, lfo:{ rate:0.07, depth:0.65 } }, // bambu / çan tonu
-    { noiseType:'white', filterType:'bandpass', filterFreq:3800, filterQ:4.0, gain:0.03, lfo:{ rate:0.10, depth:0.70 } }, // ince kristal detay
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:100,  filterQ:0.4, gain:0.08, lfo:{ rate:0.015,depth:0.22 } }, // derin zemlin
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:280,  filterQ:0.5, gain:0.12, lfo:{ rate:0.02, depth:0.18 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:750,  filterQ:0.8, gain:0.10, lfo:{ rate:0.05, depth:0.40 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:2400, filterQ:3.5, gain:0.05, lfo:{ rate:0.07, depth:0.65 } },
+    { noiseType:'white', filterType:'bandpass', filterFreq:3800, filterQ:4.0, gain:0.03, lfo:{ rate:0.10, depth:0.70 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:100,  filterQ:0.4, gain:0.08, lfo:{ rate:0.015,depth:0.22 } },
   ],
 
   // Derin orman: antik, puslu, yoğun taçortüsü
   'deep-forest': [
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:350,  filterQ:0.6, gain:0.16, lfo:{ rate:0.03, depth:0.28 } }, // orman tabanı
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:650,  filterQ:0.9, gain:0.12, lfo:{ rate:0.06, depth:0.45 } }, // taçortüsü esintisi
-    { noiseType:'brown', filterType:'bandpass', filterFreq:130,  filterQ:1.2, gain:0.08, lfo:{ rate:0.04, depth:0.35 } }, // derin uğultu
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:1700, filterQ:2.0, gain:0.05, lfo:{ rate:0.14, depth:0.55 } }, // yüksek taçortüsü
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:60,   filterQ:0.5, gain:0.07, lfo:{ rate:0.02, depth:0.25 } }, // sub-bas derinlik
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:350,  filterQ:0.6, gain:0.16, lfo:{ rate:0.03, depth:0.28 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:650,  filterQ:0.9, gain:0.12, lfo:{ rate:0.06, depth:0.45 } },
+    { noiseType:'brown', filterType:'bandpass', filterFreq:130,  filterQ:1.2, gain:0.08, lfo:{ rate:0.04, depth:0.35 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:1700, filterQ:2.0, gain:0.05, lfo:{ rate:0.14, depth:0.55 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:60,   filterQ:0.5, gain:0.07, lfo:{ rate:0.02, depth:0.25 } },
   ],
 
   // ── Asset Sounds ──────────────────────────────────────────────────────
@@ -143,62 +143,62 @@ const CONFIGS = {
   'fireplace-crackle': [
     { noiseType:'brown',  filterType:'bandpass', filterFreq:200,  filterQ:2.8, gain:0.15, lfo:{ rate:0.30, depth:0.75 } },
     { noiseType:'brown',  filterType:'lowpass',  filterFreq:95,   filterQ:1.0, gain:0.09, lfo:{ rate:0.14, depth:0.42 } },
-    { noiseType:'velvet', filterType:'bandpass', filterFreq:480,  filterQ:3.5, gain:0.06, lfo:{ rate:0.55, depth:0.85 } }, // odun patlaması
-    { noiseType:'pink',   filterType:'bandpass', filterFreq:1100, filterQ:2.0, gain:0.04, lfo:{ rate:0.42, depth:0.65 } }, // kıvılcım
-    { noiseType:'brown',  filterType:'lowpass',  filterFreq:50,   filterQ:0.8, gain:0.05, lfo:{ rate:0.08, depth:0.30 } }, // derin alev tonu
+    { noiseType:'velvet', filterType:'bandpass', filterFreq:480,  filterQ:3.5, gain:0.06, lfo:{ rate:0.55, depth:0.85 } },
+    { noiseType:'pink',   filterType:'bandpass', filterFreq:1100, filterQ:2.0, gain:0.04, lfo:{ rate:0.42, depth:0.65 } },
+    { noiseType:'brown',  filterType:'lowpass',  filterFreq:50,   filterQ:0.8, gain:0.05, lfo:{ rate:0.08, depth:0.30 } },
   ],
 
   // Pencere yağmuru: damlalar, cam titreşimi
   'rain-window': [
     { noiseType:'white', filterType:'lowpass',  filterFreq:1300, filterQ:0.6, gain:0.12, lfo:{ rate:0.22, depth:0.18 } },
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:580,  filterQ:1.8, gain:0.07, lfo:{ rate:0.18, depth:0.28 } }, // damla vurma
-    { noiseType:'white', filterType:'highpass', filterFreq:2400, filterQ:0.5, gain:0.04, lfo:{ rate:0.32, depth:0.15 } }, // sprey/sis
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:580,  filterQ:1.8, gain:0.07, lfo:{ rate:0.18, depth:0.28 } },
+    { noiseType:'white', filterType:'highpass', filterFreq:2400, filterQ:0.5, gain:0.04, lfo:{ rate:0.32, depth:0.15 } },
   ],
 
   // Gök gürültüsü: düşük yuvarlanma, çarpma
   'thunder-rumble': [
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:55,   filterQ:2.0, gain:0.22, lfo:{ rate:0.03, depth:0.82 } }, // çok derin çarpta
-    { noiseType:'brown', filterType:'bandpass', filterFreq:95,   filterQ:1.5, gain:0.16, lfo:{ rate:0.05, depth:0.68 } }, // gürültü gövdesi
-    { noiseType:'brown', filterType:'bandpass', filterFreq:170,  filterQ:1.0, gain:0.08, lfo:{ rate:0.08, depth:0.50 } }, // üst yuvarlanma
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:350,  filterQ:0.7, gain:0.04, lfo:{ rate:0.12, depth:0.35 } }, // uzak ses
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:55,   filterQ:2.0, gain:0.22, lfo:{ rate:0.03, depth:0.82 } },
+    { noiseType:'brown', filterType:'bandpass', filterFreq:95,   filterQ:1.5, gain:0.16, lfo:{ rate:0.05, depth:0.68 } },
+    { noiseType:'brown', filterType:'bandpass', filterFreq:170,  filterQ:1.0, gain:0.08, lfo:{ rate:0.08, depth:0.50 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:350,  filterQ:0.7, gain:0.04, lfo:{ rate:0.12, depth:0.35 } },
   ],
 
   // Dere: akan su, çağlayan, pınarıltı
   'stream-water': [
-    { noiseType:'white', filterType:'bandpass', filterFreq:780,  filterQ:1.2, gain:0.14, lfo:{ rate:0.28, depth:0.42 } }, // akan su sesi
-    { noiseType:'white', filterType:'bandpass', filterFreq:1400, filterQ:1.5, gain:0.10, lfo:{ rate:0.38, depth:0.52 } }, // su ayrıntısı
-    { noiseType:'pink',  filterType:'lowpass',  filterFreq:480,  filterQ:0.8, gain:0.08, lfo:{ rate:0.16, depth:0.35 } }, // akım tabanı
-    { noiseType:'white', filterType:'highpass', filterFreq:2400, filterQ:0.6, gain:0.05, lfo:{ rate:0.45, depth:0.38 } }, // su parıltısı
+    { noiseType:'white', filterType:'bandpass', filterFreq:780,  filterQ:1.2, gain:0.14, lfo:{ rate:0.28, depth:0.42 } },
+    { noiseType:'white', filterType:'bandpass', filterFreq:1400, filterQ:1.5, gain:0.10, lfo:{ rate:0.38, depth:0.52 } },
+    { noiseType:'pink',  filterType:'lowpass',  filterFreq:480,  filterQ:0.8, gain:0.08, lfo:{ rate:0.16, depth:0.35 } },
+    { noiseType:'white', filterType:'highpass', filterFreq:2400, filterQ:0.6, gain:0.05, lfo:{ rate:0.45, depth:0.38 } },
   ],
 
   // Rüzgar çanları: rezonans, kristal tınılar
   'wind-chimes': [
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:1900, filterQ:5.0, gain:0.09, lfo:{ rate:0.09, depth:0.80 } }, // ana rezonans
-    { noiseType:'white', filterType:'bandpass', filterFreq:3600, filterQ:6.0, gain:0.06, lfo:{ rate:0.06, depth:0.75 } }, // yüksek çan tonu
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:1100, filterQ:4.0, gain:0.05, lfo:{ rate:0.12, depth:0.70 } }, // orta çan
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:300,  filterQ:0.5, gain:0.04, lfo:{ rate:0.03, depth:0.22 } }, // gövde tını
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:1900, filterQ:5.0, gain:0.09, lfo:{ rate:0.09, depth:0.80 } },
+    { noiseType:'white', filterType:'bandpass', filterFreq:3600, filterQ:6.0, gain:0.06, lfo:{ rate:0.06, depth:0.75 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:1100, filterQ:4.0, gain:0.05, lfo:{ rate:0.12, depth:0.70 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:300,  filterQ:0.5, gain:0.04, lfo:{ rate:0.03, depth:0.22 } },
   ],
 
   // Orman kuşları: cıvıltı, şarkı, arka plan
   'forest-birds': [
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:3800, filterQ:7.0, gain:0.07, lfo:{ rate:1.60, depth:0.88 } }, // yüksek cıvıltı
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:2400, filterQ:5.0, gain:0.06, lfo:{ rate:0.90, depth:0.82 } }, // orta şarkı
-    { noiseType:'pink',  filterType:'bandpass', filterFreq:1600, filterQ:3.5, gain:0.05, lfo:{ rate:0.55, depth:0.70 } }, // alçak melodi
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:380,  filterQ:0.5, gain:0.04, lfo:{ rate:0.04, depth:0.18 } }, // orman zemini
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:3800, filterQ:7.0, gain:0.07, lfo:{ rate:1.60, depth:0.88 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:2400, filterQ:5.0, gain:0.06, lfo:{ rate:0.90, depth:0.82 } },
+    { noiseType:'pink',  filterType:'bandpass', filterFreq:1600, filterQ:3.5, gain:0.05, lfo:{ rate:0.55, depth:0.70 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:380,  filterQ:0.5, gain:0.04, lfo:{ rate:0.04, depth:0.18 } },
   ],
 
   // Elektrik vantilatör: sabit humming
   'desk-fan': [
-    { noiseType:'white', filterType:'bandpass', filterFreq:380,  filterQ:2.5, gain:0.10, lfo:{ rate:0.02, depth:0.08 } }, // motor hum
-    { noiseType:'white', filterType:'bandpass', filterFreq:760,  filterQ:2.0, gain:0.06, lfo:{ rate:0.03, depth:0.06 } }, // üst harmonik
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:200,  filterQ:0.6, gain:0.08, lfo:{ rate:0.01, depth:0.12 } }, // motor taban
+    { noiseType:'white', filterType:'bandpass', filterFreq:380,  filterQ:2.5, gain:0.10, lfo:{ rate:0.02, depth:0.08 } },
+    { noiseType:'white', filterType:'bandpass', filterFreq:760,  filterQ:2.0, gain:0.06, lfo:{ rate:0.03, depth:0.06 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:200,  filterQ:0.6, gain:0.08, lfo:{ rate:0.01, depth:0.12 } },
   ],
 
   // Duvar saati: tik-tak ritim
   'clock-ticking': [
-    { noiseType:'brown', filterType:'bandpass', filterFreq:2800, filterQ:8.0, gain:0.12, lfo:{ rate:2.00, depth:0.96 } }, // tik darbesi
-    { noiseType:'white', filterType:'bandpass', filterFreq:1600, filterQ:6.0, gain:0.07, lfo:{ rate:2.00, depth:0.94 } }, // tak darbesi
-    { noiseType:'brown', filterType:'lowpass',  filterFreq:280,  filterQ:0.5, gain:0.03, lfo:{ rate:0.04, depth:0.15 } }, // mekanizma
+    { noiseType:'brown', filterType:'bandpass', filterFreq:2800, filterQ:8.0, gain:0.12, lfo:{ rate:2.00, depth:0.96 } },
+    { noiseType:'white', filterType:'bandpass', filterFreq:1600, filterQ:6.0, gain:0.07, lfo:{ rate:2.00, depth:0.94 } },
+    { noiseType:'brown', filterType:'lowpass',  filterFreq:280,  filterQ:0.5, gain:0.03, lfo:{ rate:0.04, depth:0.15 } },
   ],
 }
 
@@ -214,15 +214,22 @@ const ASSET_SOUND_IDS = new Set([
   'clock-ticking',
 ])
 
+// ─── Crossfade duration (seconds) ─────────────────────────────────────────
+const CROSSFADE_DURATION = 2.0
+
 // ─── Engine ────────────────────────────────────────────────────────────────
 
 class AudioEngine {
   constructor() {
     this.ctx = null
     this.masterGain = null
-    this.layers = new Map() // soundId → [{ nodes, gainNode }]
+    this.masterAnalyser = null
+    this.channelGains = new Map()    // soundId → GainNode (per-channel volume)
+    this.channelAnalysers = new Map()// soundId → AnalyserNode (VU metering tap)
+    this.layers = new Map()          // soundId → [{ nodes, gainNode }]
     this._volume = 0.6
     this._muted = false
+    this._channelVolumes = new Map() // soundId → 0-1
   }
 
   // Call once on first user gesture
@@ -234,15 +241,39 @@ class AudioEngine {
     this.ctx = new AudioContext()
     this.masterGain = this.ctx.createGain()
     this.masterGain.gain.value = this._muted ? 0 : this._volume
-    this.masterGain.connect(this.ctx.destination)
+
+    // Master analyser for overall VU metering
+    this.masterAnalyser = this.ctx.createAnalyser()
+    this.masterAnalyser.fftSize = 256
+    this.masterGain.connect(this.masterAnalyser)
+    this.masterAnalyser.connect(this.ctx.destination)
   }
 
-  // Build one noise layer from a single config entry
-  _buildLayer(cfg) {
+  // Get or create a channel gain node with an analysis tap
+  _getOrCreateChannel(soundId, initialGain = null) {
+    if (this.channelGains.has(soundId)) return this.channelGains.get(soundId)
+
+    const channelGain = this.ctx.createGain()
+    const vol = initialGain !== null ? initialGain : (this._channelVolumes.get(soundId) ?? 1.0)
+    channelGain.gain.value = vol
+    channelGain.connect(this.masterGain)
+
+    // Analysis tap — doesn't need output connection
+    const analyser = this.ctx.createAnalyser()
+    analyser.fftSize = 256
+    channelGain.connect(analyser)
+
+    this.channelGains.set(soundId, channelGain)
+    this.channelAnalysers.set(soundId, analyser)
+    return channelGain
+  }
+
+  // Build one noise layer, connecting into channelGain
+  _buildLayer(cfg, channelGain) {
     const ctx = this.ctx
     const gainNode = ctx.createGain()
     gainNode.gain.value = cfg.gain
-    gainNode.connect(this.masterGain)
+    gainNode.connect(channelGain)
 
     const buf = createNoiseBuffer(ctx, cfg.noiseType)
     const source = ctx.createBufferSource()
@@ -271,7 +302,6 @@ class AudioEngine {
       lfoOsc.start()
       nodes.push(lfoOsc, lfoGain)
 
-      // Optional secondary LFO for extra organic movement
       if (cfg.lfo.secondaryRate) {
         const lfo2 = ctx.createOscillator()
         const lfoGain2 = ctx.createGain()
@@ -288,12 +318,13 @@ class AudioEngine {
     return { nodes, gainNode }
   }
 
-  _play(soundId) {
+  _play(soundId, initialGain = null) {
     if (!this.ctx || this.layers.has(soundId)) return
     const cfgList = CONFIGS[soundId]
     if (!cfgList) return
 
-    const layers = cfgList.map((cfg) => this._buildLayer(cfg))
+    const channelGain = this._getOrCreateChannel(soundId, initialGain)
+    const layers = cfgList.map((cfg) => this._buildLayer(cfg, channelGain))
     this.layers.set(soundId, layers)
   }
 
@@ -301,21 +332,53 @@ class AudioEngine {
     const layers = this.layers.get(soundId)
     if (!layers) return
     layers.forEach(({ nodes, gainNode }) => {
-      nodes.forEach(n => { n.stop?.(); n.disconnect() })
-      gainNode.disconnect()
+      nodes.forEach(n => { try { n.stop?.(); n.disconnect() } catch (_) {} })
+      try { gainNode.disconnect() } catch (_) {}
     })
     this.layers.delete(soundId)
+
+    const channelGain = this.channelGains.get(soundId)
+    if (channelGain) {
+      try { channelGain.disconnect() } catch (_) {}
+      this.channelGains.delete(soundId)
+    }
+    this.channelAnalysers.delete(soundId)
   }
 
   // ─── Public API ──────────────────────────────────────────────────────────
 
+  // Play background with crossfade from previous
   playAmbient(bgId) {
     this.init()
-    // Stop all non-asset ambient layers
-    Object.keys(CONFIGS)
-      .filter(id => !ASSET_SOUND_IDS.has(id))
-      .forEach(id => this._stop(id))
-    this._play(bgId)
+    const now = this.ctx.currentTime
+
+    // Currently playing backgrounds (exclude assets and target)
+    const currentBgIds = [...this.layers.keys()].filter(
+      id => !ASSET_SOUND_IDS.has(id) && id !== bgId
+    )
+
+    // Start new background at silence, then fade in
+    this._play(bgId, 0)
+    const newGain = this.channelGains.get(bgId)
+    if (newGain) {
+      const targetVol = this._channelVolumes.get(bgId) ?? 1.0
+      newGain.gain.cancelScheduledValues(now)
+      newGain.gain.setValueAtTime(0, now)
+      newGain.gain.linearRampToValueAtTime(targetVol, now + CROSSFADE_DURATION)
+    }
+
+    // Fade out old backgrounds then stop
+    currentBgIds.forEach(id => {
+      const oldGain = this.channelGains.get(id)
+      if (oldGain) {
+        oldGain.gain.cancelScheduledValues(now)
+        oldGain.gain.setValueAtTime(oldGain.gain.value, now)
+        oldGain.gain.linearRampToValueAtTime(0, now + CROSSFADE_DURATION)
+        setTimeout(() => this._stop(id), (CROSSFADE_DURATION + 0.2) * 1000)
+      } else {
+        this._stop(id)
+      }
+    })
   }
 
   playAssetSound(soundId) {
@@ -343,6 +406,42 @@ class AudioEngine {
         0.15
       )
     }
+  }
+
+  // Set per-channel volume (0-1) — affects only that sound's gain node
+  setChannelVolume(soundId, vol) {
+    this._channelVolumes.set(soundId, vol)
+    const channelGain = this.channelGains.get(soundId)
+    if (channelGain && this.ctx) {
+      channelGain.gain.setTargetAtTime(vol, this.ctx.currentTime, 0.08)
+    }
+  }
+
+  // RMS level 0-1 for a specific channel (for VU metering)
+  getChannelLevel(soundId) {
+    const analyser = this.channelAnalysers.get(soundId)
+    if (!analyser) return 0
+    const data = new Uint8Array(analyser.frequencyBinCount)
+    analyser.getByteTimeDomainData(data)
+    let sum = 0
+    for (let i = 0; i < data.length; i++) {
+      const v = (data[i] - 128) / 128
+      sum += v * v
+    }
+    return Math.min(1, Math.sqrt(sum / data.length) * 10)
+  }
+
+  // RMS level 0-1 for master output
+  getMasterLevel() {
+    if (!this.masterAnalyser) return 0
+    const data = new Uint8Array(this.masterAnalyser.frequencyBinCount)
+    this.masterAnalyser.getByteTimeDomainData(data)
+    let sum = 0
+    for (let i = 0; i < data.length; i++) {
+      const v = (data[i] - 128) / 128
+      sum += v * v
+    }
+    return Math.min(1, Math.sqrt(sum / data.length) * 10)
   }
 
   get activeSounds() {

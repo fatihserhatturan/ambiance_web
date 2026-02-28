@@ -4,16 +4,17 @@ import { audioEngine } from '../audio/AudioEngine'
 
 /**
  * Connects the Zustand scene store to the AudioEngine.
- * Mount once in App — listens to background, assets, volume, and mute changes.
+ * Mount once in App — listens to background, assets, volume, mute, and per-channel volume changes.
  */
 export function useAudioManager() {
   const activeBackground = useSceneStore((s) => s.activeBackground)
   const sceneAssets      = useSceneStore((s) => s.sceneAssets)
   const audioVolume      = useSceneStore((s) => s.audioVolume)
   const audioMuted       = useSceneStore((s) => s.audioMuted)
+  const channelVolumes   = useSceneStore((s) => s.channelVolumes)
 
-  const started   = useRef(false)
-  const prevBg    = useRef(null)
+  const started    = useRef(false)
+  const prevBg     = useRef(null)
   const prevAssets = useRef([])
 
   // ── Start on first user interaction (browser autoplay policy) ──────────
@@ -24,7 +25,6 @@ export function useAudioManager() {
       audioEngine.playAmbient(activeBackground)
       prevBg.current = activeBackground
     }
-    // Any click or keypress will trigger
     document.addEventListener('click',   start, { once: true })
     document.addEventListener('keydown', start, { once: true })
     return () => {
@@ -67,7 +67,7 @@ export function useAudioManager() {
     prevAssets.current = curr
   }, [sceneAssets])
 
-  // ── Volume ────────────────────────────────────────────────────────────
+  // ── Master volume ──────────────────────────────────────────────────────
   useEffect(() => {
     audioEngine.setVolume(audioVolume)
   }, [audioVolume])
@@ -76,4 +76,11 @@ export function useAudioManager() {
   useEffect(() => {
     audioEngine.setMute(audioMuted)
   }, [audioMuted])
+
+  // ── Per-channel volumes ────────────────────────────────────────────────
+  useEffect(() => {
+    Object.entries(channelVolumes).forEach(([soundId, vol]) => {
+      audioEngine.setChannelVolume(soundId, vol)
+    })
+  }, [channelVolumes])
 }

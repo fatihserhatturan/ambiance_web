@@ -1,16 +1,29 @@
+import { useState, useEffect, useRef } from 'react'
 import { useSceneStore } from '../../store/sceneStore'
-import { BACKGROUNDS, SCENE_ASSETS } from '../../data/registry'
+import { BACKGROUNDS, SCENE_ASSETS, AUDIO_TRACKS } from '../../data/registry'
+import { audioEngine } from '../../audio/AudioEngine'
 import './Sidebar.css'
 
+// ─── Icon lookup from audio track registry ────────────────────────────────
+const SOUND_ICON = Object.fromEntries(AUDIO_TRACKS.map(t => [t.id, t.icon]))
+
+// ─── Root sidebar ─────────────────────────────────────────────────────────
+
 export default function Sidebar() {
-  const sidebarOpen    = useSceneStore((s) => s.sidebarOpen)
-  const activePanelTab = useSceneStore((s) => s.activePanelTab)
+  const sidebarOpen       = useSceneStore((s) => s.sidebarOpen)
+  const activePanelTab    = useSceneStore((s) => s.activePanelTab)
   const setSidebarOpen    = useSceneStore((s) => s.setSidebarOpen)
   const setActivePanelTab = useSceneStore((s) => s.setActivePanelTab)
 
+  const TABS = [
+    { id: 'backgrounds', label: 'Sahneler', icon: '🪟' },
+    { id: 'assets',      label: 'Nesneler', icon: '✨' },
+    { id: 'mixer',       label: 'Mikser',   icon: '🎚️' },
+    { id: 'presets',     label: 'Presetler',icon: '🎛️' },
+  ]
+
   return (
     <>
-      {/* Toggle button */}
       <button
         className={`sidebar-toggle ${sidebarOpen ? 'open' : ''}`}
         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -22,15 +35,11 @@ export default function Sidebar() {
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <span className="sidebar-title">ambiance</span>
+          <span className="sidebar-subtitle">studio</span>
         </div>
 
-        {/* Tab nav */}
         <nav className="sidebar-tabs">
-          {[
-            { id: 'backgrounds', label: 'Sahneler', icon: '🪟' },
-            { id: 'assets',      label: 'Nesneler', icon: '✨' },
-            { id: 'audio',       label: 'Ses',      icon: '🔊' },
-          ].map((tab) => (
+          {TABS.map((tab) => (
             <button
               key={tab.id}
               className={`sidebar-tab ${activePanelTab === tab.id ? 'active' : ''}`}
@@ -45,14 +54,16 @@ export default function Sidebar() {
         <div className="sidebar-body">
           {activePanelTab === 'backgrounds' && <BackgroundsPanel />}
           {activePanelTab === 'assets'      && <AssetsPanel />}
-          {activePanelTab === 'audio'       && <AudioPanel />}
+          {activePanelTab === 'mixer'       && <MixerPanel />}
+          {activePanelTab === 'presets'     && <PresetsPanel />}
         </div>
       </aside>
     </>
   )
 }
 
-// ─── Backgrounds panel ───────────────────────────────────────────────────
+// ─── Backgrounds panel ────────────────────────────────────────────────────
+
 const BG_GROUPS = [
   { key: 'nature',   label: 'Doğa & Gece',   ids: ['forest-night', 'deep-forest', 'japanese-garden'] },
   { key: 'weather',  label: 'Hava & Mevsim',  ids: ['snowy-cabin', 'rainy-city', 'autumn-garden', 'thunderstorm'] },
@@ -96,7 +107,8 @@ function BackgroundsPanel() {
   )
 }
 
-// ─── Assets panel ────────────────────────────────────────────────────────
+// ─── Assets panel ─────────────────────────────────────────────────────────
+
 const ASSET_GROUPS = [
   { key: 'warmth',   label: 'Sıcaklık',  icon: '🔥' },
   { key: 'weather',  label: 'Hava',      icon: '🌧️' },
@@ -105,12 +117,12 @@ const ASSET_GROUPS = [
 ]
 
 function AssetsPanel() {
-  const sceneAssets        = useSceneStore((s) => s.sceneAssets)
-  const addAsset           = useSceneStore((s) => s.addAsset)
-  const removeAsset        = useSceneStore((s) => s.removeAsset)
+  const sceneAssets         = useSceneStore((s) => s.sceneAssets)
+  const addAsset            = useSceneStore((s) => s.addAsset)
+  const removeAsset         = useSceneStore((s) => s.removeAsset)
   const updateAssetSettings = useSceneStore((s) => s.updateAssetSettings)
 
-  const isActive  = (id) => sceneAssets.some((a) => a.id === id)
+  const isActive    = (id) => sceneAssets.some((a) => a.id === id)
   const getInstance = (id) => sceneAssets.find((a) => a.id === id)
 
   const toggleAsset = (assetDef) => {
@@ -159,7 +171,6 @@ function AssetsPanel() {
                       </button>
                     </div>
 
-                    {/* Settings sliders when active */}
                     {active && instance && (
                       <div className="asset-settings">
                         <label className="setting-row">
@@ -203,73 +214,283 @@ function AssetsPanel() {
   )
 }
 
-// ─── Audio panel ─────────────────────────────────────────────────────────
-function AudioPanel() {
+// ─── VU Bars component ─────────────────────────────────────────────────────
+// Polls AudioEngine's analyser every 150ms to detect activity,
+// then drives CSS animations for organic visual feedback.
+
+function VUBars({ soundId, bars = 6 }) {
+  const [active, setActive] = useState(false)
+  const intervalRef = useRef(null)
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      const lvl = soundId === '__master__'
+        ? audioEngine.getMasterLevel()
+        : audioEngine.getChannelLevel(soundId)
+      setActive(lvl > 0.008)
+    }, 150)
+    return () => clearInterval(intervalRef.current)
+  }, [soundId])
+
+  return (
+    <div className={`vu-bars ${active ? 'active' : ''}`} aria-hidden="true">
+      {Array.from({ length: bars }, (_, i) => (
+        <div key={i} className={`vu-bar vu-bar-${i + 1}`} />
+      ))}
+    </div>
+  )
+}
+
+// ─── Mixer channel strip ───────────────────────────────────────────────────
+
+function ChannelStrip({ soundId, label, icon, badge, badgeType, isMaster = false }) {
+  const channelVolumes   = useSceneStore((s) => s.channelVolumes)
   const audioVolume      = useSceneStore((s) => s.audioVolume)
   const audioMuted       = useSceneStore((s) => s.audioMuted)
-  const activeBackground = useSceneStore((s) => s.activeBackground)
-  const sceneAssets      = useSceneStore((s) => s.sceneAssets)
+  const setChannelVolume = useSceneStore((s) => s.setChannelVolume)
   const setAudioVolume   = useSceneStore((s) => s.setAudioVolume)
   const toggleMute       = useSceneStore((s) => s.toggleMute)
 
-  const activeBg         = BACKGROUNDS.find((b) => b.id === activeBackground)
-  const activeAssetSounds = sceneAssets.filter((a) => a.hasSound && a.settings?.sound !== false)
+  const [channelMuted, setChannelMuted] = useState(false)
+  const prevVolRef = useRef(1)
+
+  const handleChannelMute = () => {
+    if (isMaster) {
+      toggleMute()
+      return
+    }
+    if (channelMuted) {
+      setChannelVolume(soundId, prevVolRef.current)
+      setChannelMuted(false)
+    } else {
+      prevVolRef.current = channelVolumes[soundId] ?? 1
+      setChannelVolume(soundId, 0)
+      setChannelMuted(true)
+    }
+  }
+
+  const isMuted = isMaster ? audioMuted : channelMuted
+  const volume  = isMaster
+    ? audioVolume
+    : (channelVolumes[soundId] ?? 1)
+
+  const handleVolumeChange = (val) => {
+    if (isMaster) {
+      setAudioVolume(val)
+    } else {
+      if (channelMuted && val > 0) setChannelMuted(false)
+      setChannelVolume(soundId, val)
+    }
+  }
+
+  return (
+    <div className={`mixer-channel ${isMaster ? 'mixer-master' : ''} ${isMuted ? 'muted' : ''}`}>
+      <div className="mixer-channel-header">
+        <span className="mixer-channel-icon">{icon}</span>
+        <span className="mixer-channel-name">{label}</span>
+        {badge && (
+          <span className={`mixer-channel-badge badge-${badgeType}`}>{badge}</span>
+        )}
+      </div>
+
+      <div className="mixer-channel-controls">
+        <button
+          className={`mixer-mute-btn ${isMuted ? 'muted' : ''}`}
+          onClick={handleChannelMute}
+          title={isMuted ? 'Sesi aç' : 'Sesi kapat'}
+        >
+          {isMuted ? '🔇' : '🔊'}
+        </button>
+
+        <VUBars soundId={isMaster ? '__master__' : soundId} />
+
+        <input
+          type="range" min={0} max={1} step={0.01}
+          value={isMuted && isMaster ? 0 : volume}
+          onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
+          className="mixer-slider"
+        />
+
+        <span className="mixer-vol-label">
+          {isMuted ? '—' : `${Math.round(volume * 100)}%`}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+// ─── Mixer panel ───────────────────────────────────────────────────────────
+
+function MixerPanel() {
+  const activeBackground = useSceneStore((s) => s.activeBackground)
+  const sceneAssets      = useSceneStore((s) => s.sceneAssets)
+
+  const activeBg = BACKGROUNDS.find((b) => b.id === activeBackground)
+  const bgIcon   = activeBg ? (SOUND_ICON[activeBg.ambientSound] || '🌿') : '🌿'
+
+  const activeAssets = sceneAssets.filter(
+    (a) => a.hasSound && a.settings?.sound !== false
+  )
+
+  return (
+    <div className="panel-section mixer-panel">
+
+      {/* Master bus */}
+      <div className="mixer-section-label">Master</div>
+      <ChannelStrip
+        soundId="__master__"
+        label="Master"
+        icon="🎛️"
+        isMaster
+      />
+
+      {/* Channel strips */}
+      <div className="mixer-section-label" style={{ marginTop: 20 }}>Kanallar</div>
+
+      {activeBg && (
+        <ChannelStrip
+          soundId={activeBg.ambientSound}
+          label={activeBg.label}
+          icon={bgIcon}
+          badge="zemin"
+          badgeType="background"
+        />
+      )}
+
+      {activeAssets.map((asset) => (
+        <ChannelStrip
+          key={asset.instanceId}
+          soundId={asset.soundId}
+          label={asset.label}
+          icon={asset.icon}
+          badge="nesne"
+          badgeType="asset"
+        />
+      ))}
+
+      {activeAssets.length === 0 && (
+        <p className="mixer-empty">
+          Nesneler panelinden ses nesnesi ekle
+        </p>
+      )}
+
+      <p className="panel-hint" style={{ marginTop: 20, fontSize: '10px' }}>
+        Sesi başlatmak için sahneye tıkla
+      </p>
+    </div>
+  )
+}
+
+// ─── Presets panel ─────────────────────────────────────────────────────────
+
+function PresetsPanel() {
+  const activeBackground = useSceneStore((s) => s.activeBackground)
+  const sceneAssets      = useSceneStore((s) => s.sceneAssets)
+  const presets          = useSceneStore((s) => s.presets)
+  const savePreset       = useSceneStore((s) => s.savePreset)
+  const loadPreset       = useSceneStore((s) => s.loadPreset)
+  const deletePreset     = useSceneStore((s) => s.deletePreset)
+
+  const [presetName, setPresetName] = useState('')
+  const [savedFeedback, setSavedFeedback] = useState(false)
+
+  const activeBg = BACKGROUNDS.find((b) => b.id === activeBackground)
+
+  const handleSave = () => {
+    if (!presetName.trim()) return
+    savePreset(presetName)
+    setPresetName('')
+    setSavedFeedback(true)
+    setTimeout(() => setSavedFeedback(false), 2000)
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') handleSave()
+  }
+
+  // Build a summary string for a preset
+  const presetSummary = (preset) => {
+    const bg = BACKGROUNDS.find(b => b.id === preset.background)
+    const bgLabel = bg?.label || preset.background
+    if (!preset.assets?.length) return bgLabel
+    const assetLabels = preset.assets
+      .slice(0, 2)
+      .map(a => SCENE_ASSETS.find(s => s.id === a.id)?.label || a.id)
+    const rest = preset.assets.length > 2 ? ` +${preset.assets.length - 2}` : ''
+    return `${bgLabel} · ${assetLabels.join(', ')}${rest}`
+  }
 
   return (
     <div className="panel-section">
-      <p className="panel-hint">Ambiyans ses kontrolü</p>
+      <p className="panel-hint">Ambiyansı kaydet ve yükle</p>
 
-      {/* Master volume */}
-      <div className="audio-master">
-        <button
-          className="mute-btn"
-          onClick={toggleMute}
-          title={audioMuted ? 'Sesi Aç' : 'Sesi Kapat'}
-        >
-          {audioMuted ? '🔇' : '🔊'}
-        </button>
-        <input
-          type="range" min={0} max={1} step={0.02}
-          value={audioMuted ? 0 : audioVolume}
-          onChange={(e) => setAudioVolume(parseFloat(e.target.value))}
-          className="volume-slider"
-        />
-        <span className="volume-label">
-          {audioMuted ? 'Sessiz' : `${Math.round(audioVolume * 100)}%`}
+      {/* Current ambiance preview */}
+      <div className="preset-current-card">
+        <span className="preset-current-label">Şu anki ambiyans</span>
+        <span className="preset-current-bg">
+          {activeBg?.label || activeBackground}
         </span>
+        {sceneAssets.length > 0 && (
+          <span className="preset-current-assets">
+            {sceneAssets.map(a => a.icon).join(' ')} {sceneAssets.length} nesne
+          </span>
+        )}
       </div>
 
-      {/* Active layers */}
-      <p className="panel-hint" style={{ marginTop: '16px' }}>Aktif katmanlar</p>
-      <div className="audio-layers">
-        {activeBg && (
-          <div className="audio-layer-row">
-            <span className="audio-layer-dot playing" />
-            <span className="audio-layer-name">{activeBg.label} — ambiyans</span>
-            <span className="audio-layer-badge">arka plan</span>
-          </div>
-        )}
-
-        {activeAssetSounds.length === 0 && (
-          <div className="audio-layer-row muted-row">
-            <span className="audio-layer-dot" />
-            <span className="audio-layer-name" style={{ opacity: 0.4 }}>
-              Nesne sesi yok
-            </span>
-          </div>
-        )}
-        {activeAssetSounds.map((a) => (
-          <div key={a.instanceId} className="audio-layer-row">
-            <span className="audio-layer-dot playing" />
-            <span className="audio-layer-name">{a.label}</span>
-            <span className="audio-layer-badge">nesne</span>
-          </div>
-        ))}
+      {/* Save row */}
+      <div className="preset-save-row">
+        <input
+          className="preset-name-input"
+          type="text"
+          placeholder="Preset adı..."
+          value={presetName}
+          onChange={(e) => setPresetName(e.target.value)}
+          onKeyDown={handleKeyDown}
+          maxLength={40}
+        />
+        <button
+          className={`preset-save-btn ${savedFeedback ? 'saved' : ''}`}
+          onClick={handleSave}
+          disabled={!presetName.trim()}
+          title="Mevcut ambiyansı kaydet"
+        >
+          {savedFeedback ? '✓' : '💾'}
+        </button>
       </div>
 
-      <p className="panel-hint" style={{ marginTop: '16px', fontSize: '10px', opacity: 0.45 }}>
-        Sesi başlatmak için sahneye tıkla
-      </p>
+      {/* Saved presets list */}
+      {presets.length === 0 ? (
+        <div className="preset-empty">
+          <span>Henüz kaydedilmiş preset yok</span>
+          <span>Ambiyansını oluştur ve kaydet</span>
+        </div>
+      ) : (
+        <div className="preset-list">
+          <span className="preset-list-label">Kaydedilen presetler</span>
+          {[...presets].reverse().map((preset) => (
+            <div key={preset.id} className="preset-card">
+              <div className="preset-card-info">
+                <span className="preset-card-name">{preset.name}</span>
+                <span className="preset-card-meta">{presetSummary(preset)}</span>
+              </div>
+              <button
+                className="preset-load-btn"
+                onClick={() => loadPreset(preset.id)}
+                title="Bu ambiyansı yükle"
+              >
+                Yükle
+              </button>
+              <button
+                className="preset-delete-btn"
+                onClick={() => deletePreset(preset.id)}
+                title="Sil"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
