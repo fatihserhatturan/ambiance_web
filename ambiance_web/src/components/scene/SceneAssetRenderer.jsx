@@ -1,14 +1,7 @@
 import { useRef, useState } from 'react'
 import { useSceneStore } from '../../store/sceneStore'
-import Fireplace from '../assets/Fireplace'
+import { ASSET_COMPONENTS } from '../assets'
 import './SceneAssetRenderer.css'
-
-// Maps asset id → component
-const ASSET_COMPONENTS = {
-  fireplace: Fireplace,
-  // candle: Candle,  <- add later
-  // rain-window: RainWindow,
-}
 
 export default function SceneAssetRenderer({ asset }) {
   const updatePosition = useSceneStore((s) => s.updateAssetPosition)

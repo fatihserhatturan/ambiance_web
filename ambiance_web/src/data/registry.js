@@ -12,6 +12,7 @@ export const BACKGROUNDS = [
     gradient: 'linear-gradient(180deg, #050a14 0%, #0e1e38 35%, #1a3420 65%, #0d1a0d 100%)',
     overlayColor: 'rgba(8, 12, 22, 0.32)',
     ambientSound: 'forest-night',
+    group: 'nature',
   },
   {
     id: 'deep-forest',
@@ -20,6 +21,7 @@ export const BACKGROUNDS = [
     gradient: 'linear-gradient(180deg, #020806 0%, #061410 30%, #0e2416 60%, #0a1c10 100%)',
     overlayColor: 'rgba(2, 10, 5, 0.40)',
     ambientSound: 'deep-forest',
+    group: 'nature',
   },
   {
     id: 'japanese-garden',
@@ -28,6 +30,7 @@ export const BACKGROUNDS = [
     gradient: 'linear-gradient(180deg, #040c08 0%, #0c1e14 30%, #14302a 65%, #1a2a1e 100%)',
     overlayColor: 'rgba(0, 18, 10, 0.28)',
     ambientSound: 'japanese-garden',
+    group: 'nature',
   },
 
   // ── Hava / Mevsim ────────────────────────────────────────────────────
@@ -39,6 +42,7 @@ export const BACKGROUNDS = [
     gradient: 'linear-gradient(180deg, #0e1428 0%, #1e2a4a 40%, #2e3e6e 70%, #aabccc 100%)',
     overlayColor: 'rgba(180, 200, 220, 0.07)',
     ambientSound: 'winter-wind',
+    group: 'weather',
   },
   {
     id: 'rainy-city',
@@ -47,6 +51,7 @@ export const BACKGROUNDS = [
     gradient: 'linear-gradient(180deg, #080808 0%, #141428 40%, #101830 70%, #0a2444 100%)',
     overlayColor: 'rgba(0, 8, 36, 0.42)',
     ambientSound: 'rain-city',
+    group: 'weather',
   },
   {
     id: 'autumn-garden',
@@ -55,6 +60,7 @@ export const BACKGROUNDS = [
     gradient: 'linear-gradient(180deg, #140a02 0%, #321606 30%, #663210 60%, #261406 100%)',
     overlayColor: 'rgba(100, 50, 8, 0.16)',
     ambientSound: 'autumn-wind',
+    group: 'weather',
   },
   {
     id: 'thunderstorm',
@@ -63,6 +69,7 @@ export const BACKGROUNDS = [
     gradient: 'linear-gradient(180deg, #06060e 0%, #10101e 30%, #181428 60%, #101820 100%)',
     overlayColor: 'rgba(15, 8, 35, 0.48)',
     ambientSound: 'thunderstorm',
+    group: 'weather',
   },
 
   // ── Manzara ──────────────────────────────────────────────────────────
@@ -74,6 +81,7 @@ export const BACKGROUNDS = [
     gradient: 'linear-gradient(180deg, #080e1c 0%, #0e2242 35%, #145678 65%, #1a6e60 100%)',
     overlayColor: 'rgba(0, 22, 50, 0.26)',
     ambientSound: 'ocean-coast',
+    group: 'landscape',
   },
   {
     id: 'mountain-peak',
@@ -82,6 +90,7 @@ export const BACKGROUNDS = [
     gradient: 'linear-gradient(180deg, #04060e 0%, #0c1428 35%, #162240 65%, #2a1c38 100%)',
     overlayColor: 'rgba(8, 16, 44, 0.32)',
     ambientSound: 'mountain-peak',
+    group: 'landscape',
   },
 
   // ── İç Mekan ─────────────────────────────────────────────────────────
@@ -93,7 +102,25 @@ export const BACKGROUNDS = [
     gradient: 'linear-gradient(180deg, #140a04 0%, #2e1606 30%, #563010 60%, #3c2008 100%)',
     overlayColor: 'rgba(60, 30, 0, 0.20)',
     ambientSound: 'coffee-shop',
+    group: 'indoor',
   },
+]
+
+// ─── UI Grouping Metadata ──────────────────────────────────────────────────
+// Background grupları — BACKGROUNDS[].group alanıyla eşleşir
+export const BG_GROUPS = [
+  { key: 'nature',    label: 'Doğa & Gece' },
+  { key: 'weather',   label: 'Hava & Mevsim' },
+  { key: 'landscape', label: 'Manzara' },
+  { key: 'indoor',    label: 'İç Mekan' },
+]
+
+// Asset kategorileri — SCENE_ASSETS[].category alanıyla eşleşir
+export const ASSET_GROUPS = [
+  { key: 'warmth',   label: 'Sıcaklık', icon: '🔥' },
+  { key: 'weather',  label: 'Hava',     icon: '🌧️' },
+  { key: 'nature',   label: 'Doğa',     icon: '🌿' },
+  { key: 'ambiance', label: 'Ortam',    icon: '🎶' },
 ]
 
 // ─── Scene Assets ─────────────────────────────────────────────────────────
