@@ -11,7 +11,7 @@ export default function SceneCanvas() {
 
   return (
     <div className="scene-root">
-      {/* === LAYER 0: Sky / Background gradient === */}
+      {/* === LAYER 1: Sky / Background scene (visible through window) === */}
       <div
         className="scene-layer layer-background"
         style={{ background: bg.gradient }}
@@ -19,25 +19,28 @@ export default function SceneCanvas() {
         <BackgroundDetails bgId={activeBackground} />
       </div>
 
-      {/* === LAYER 1: Window frame === */}
-      <div className="scene-layer layer-window">
-        <WindowFrame />
+      {/* === LAYER 2: Room frame — walls, ceiling, floor, window frame === */}
+      <div className="scene-layer layer-room">
+        <RoomFrame />
       </div>
 
-      {/* === LAYER 2: Scene objects / placed assets === */}
+      {/* === LAYER 3: Scene objects / placed assets === */}
       <div className="scene-layer layer-objects">
         {sceneAssets.map((asset) => (
           <SceneAssetRenderer key={asset.instanceId} asset={asset} />
         ))}
       </div>
 
-      {/* === LAYER 3: Overlay / atmosphere === */}
+      {/* === LAYER 4: Atmospheric overlay (only tints the outdoor scene) === */}
       <div
         className="scene-layer layer-overlay"
         style={{ background: bg.overlayColor }}
       />
 
-      {/* === LAYER 4: Vignette === */}
+      {/* === LAYER 5: Window glass reflection === */}
+      <div className="scene-layer layer-glass" />
+
+      {/* === LAYER 6: Room depth & vignette === */}
       <div className="scene-layer layer-vignette" />
     </div>
   )
@@ -273,17 +276,28 @@ function DeepForestDetails() {
   )
 }
 
-// ─── Window Frame ────────────────────────────────────────────────────────
-function WindowFrame() {
+// ─── Room Frame ──────────────────────────────────────────────────────────
+// Interior room with floor-to-ceiling panoramic window.
+// Window opening: x 20%→80%, y 9%→90%
+function RoomFrame() {
   return (
-    <div className="window-frame">
-      <div className="window-pane top-left" />
-      <div className="window-pane top-right" />
-      <div className="window-pane bottom-left" />
-      <div className="window-pane bottom-right" />
-      <div className="window-cross-h" />
-      <div className="window-cross-v" />
-      <div className="window-sill" />
+    <div className="room">
+      {/* Structural surfaces */}
+      <div className="room-ceiling" />
+      <div className="room-wall-left" />
+      <div className="room-wall-right" />
+      <div className="room-floor" />
+
+      {/* Wood trim framing the window opening */}
+      <div className="room-trim-h room-trim-top" />
+      <div className="room-trim-h room-trim-bottom" />
+      <div className="room-trim-v room-trim-left" />
+      <div className="room-trim-v room-trim-right" />
+
+      {/* Thin metal window frame dividers */}
+      <div className="win-div win-div-v1" />
+      <div className="win-div win-div-v2" />
+      <div className="win-div win-div-h" />
     </div>
   )
 }
