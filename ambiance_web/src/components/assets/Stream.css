@@ -1,0 +1,184 @@
+/* ═══════════════════════════════════════════════════
+   STREAM — Flowing water with ripples and foam
+   ═══════════════════════════════════════════════════ */
+
+.stream-wrap {
+  position: relative;
+  width:  calc(220px * var(--size));
+  height: calc(110px * var(--size));
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ── Rocky banks ── */
+.stream-bank-left,
+.stream-bank-right {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 16%;
+  z-index: 2;
+}
+
+.stream-bank-left {
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    #1e1206 0%,
+    #2e1c0a 45%,
+    #3a2410 80%,
+    rgba(50, 32, 14, 0.55) 100%
+  );
+  border-radius: 8px 0 0 8px;
+  box-shadow: inset -6px 0 14px rgba(0, 0, 0, 0.35);
+}
+
+.stream-bank-right {
+  right: 0;
+  background: linear-gradient(
+    270deg,
+    #1e1206 0%,
+    #2e1c0a 45%,
+    #3a2410 80%,
+    rgba(50, 32, 14, 0.55) 100%
+  );
+  border-radius: 0 8px 8px 0;
+  box-shadow: inset 6px 0 14px rgba(0, 0, 0, 0.35);
+}
+
+/* Bank texture: moss & rock tints */
+.stream-bank-left::before,
+.stream-bank-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 30% at 50% 20%, rgba(40, 70, 25, 0.35) 0%, transparent 100%),
+    radial-gradient(ellipse 40% 40% at 60% 70%, rgba(25, 55, 20, 0.25) 0%, transparent 100%);
+}
+
+/* ── Water body ── */
+.stream-water {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 14%; right: 14%;
+  background: linear-gradient(
+    180deg,
+    rgba(50, 110, 165, 0.92) 0%,
+    rgba(35,  90, 145, 0.96) 55%,
+    rgba(22,  70, 120, 1.00) 100%
+  );
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* ── Flowing current layers ── */
+.stream-current {
+  position: absolute;
+  top: 0; bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(100, 170, 220, 0.22) 0%,
+    rgba(75,  145, 200, 0.30) 55%,
+    rgba(55,  120, 180, 0.18) 100%
+  );
+  animation: streamCurrentFlow linear infinite;
+}
+
+.c1 { left:  5%; width: 28%; animation-duration: calc(var(--speed) * 0.7); }
+.c2 { left: 32%; width: 34%; animation-duration: var(--speed); animation-delay: -0.4s; opacity: 0.80; }
+.c3 { left: 62%; width: 28%; animation-duration: calc(var(--speed) * 1.25); animation-delay: -0.7s; opacity: 0.65; }
+
+/* ── Surface shimmer (horizontal bands) ── */
+.stream-surface {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent               0px,
+    transparent               7px,
+    rgba(140, 200, 240, 0.07) 7px,
+    rgba(140, 200, 240, 0.07) 9px
+  );
+  animation: streamSurfaceScroll linear infinite;
+  animation-duration: calc(var(--speed) * 0.28);
+  pointer-events: none;
+}
+
+/* ── Light caustics ── */
+.stream-caustics {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 30% 12% at 25% 35%, rgba(190, 235, 255, 0.18) 0%, transparent 100%),
+    radial-gradient(ellipse 20%  8% at 62% 55%, rgba(170, 220, 250, 0.14) 0%, transparent 100%),
+    radial-gradient(ellipse 25% 10% at 80% 25%, rgba(180, 228, 252, 0.12) 0%, transparent 100%);
+  animation: streamCausticShift 4s ease-in-out infinite alternate;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* ── Ripple circles ── */
+.stream-ripple {
+  position: absolute;
+  width: 22px; height: 10px;
+  border: 1.5px solid rgba(200, 235, 255, 0.50);
+  border-radius: 50%;
+  animation: streamRippleExpand ease-out infinite;
+  pointer-events: none;
+}
+
+/* ── Foam patches ── */
+.stream-foam {
+  position: absolute;
+  width: 10px; height: 5px;
+  background: rgba(240, 250, 255, 0.65);
+  border-radius: 50%;
+  filter: blur(0.5px);
+  animation: streamFoamDrift ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* ── Pebble bed ── */
+.stream-pebbles {
+  position: absolute;
+  bottom: 0; left: 12%; right: 12%;
+  height: 22%;
+  background:
+    radial-gradient(circle 9px  at 12% 55%, rgba(70,  54, 34, 0.90) 0%, transparent 100%),
+    radial-gradient(circle 7px  at 30% 45%, rgba(85,  66, 42, 0.80) 0%, transparent 100%),
+    radial-gradient(circle 11px at 50% 58%, rgba(65,  50, 30, 0.88) 0%, transparent 100%),
+    radial-gradient(circle 8px  at 68% 42%, rgba(80,  62, 38, 0.82) 0%, transparent 100%),
+    radial-gradient(circle 6px  at 84% 52%, rgba(90,  70, 44, 0.78) 0%, transparent 100%),
+    radial-gradient(circle 9px  at 22% 70%, rgba(72,  56, 35, 0.75) 0%, transparent 100%),
+    radial-gradient(circle 7px  at 74% 68%, rgba(82,  64, 40, 0.72) 0%, transparent 100%);
+  opacity: 0.65;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ═══ KEYFRAMES ═══ */
+@keyframes streamCurrentFlow {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(100%);  }
+}
+
+@keyframes streamSurfaceScroll {
+  from { background-position: 0 0;    }
+  to   { background-position: 0 18px; }
+}
+
+@keyframes streamCausticShift {
+  from { opacity: 0.7; transform: translateX(-2%); }
+  to   { opacity: 1.0; transform: translateX( 2%); }
+}
+
+@keyframes streamRippleExpand {
+  0%   { opacity: 0; transform: scale(0.30); }
+  25%  { opacity: 0.8; }
+  100% { opacity: 0; transform: scale(2.20); }
+}
+
+@keyframes streamFoamDrift {
+  from { opacity: 0.35; transform: scaleX(0.80) translateX(-3px); }
+  to   { opacity: 0.70; transform: scaleX(1.35) translateX( 3px); }
+}

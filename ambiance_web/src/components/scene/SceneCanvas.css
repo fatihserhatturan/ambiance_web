@@ -302,12 +302,13 @@
   position: absolute;
   background: #fff;
   border-radius: 50%;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.65);
   animation: twinkle 2s ease-in-out infinite alternate;
 }
 
 @keyframes twinkle {
-  from { opacity: 0.2; transform: scale(0.8); }
-  to   { opacity: 0.9; transform: scale(1.2); }
+  from { opacity: 0.2; transform: scale(0.8); box-shadow: 0 0 2px rgba(255,255,255,0.4); }
+  to   { opacity: 0.9; transform: scale(1.3); box-shadow: 0 0 6px rgba(255,255,255,0.9); }
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -770,4 +771,978 @@
 @keyframes mistDrift {
   from { transform: translateX(-2%); opacity: 0.6; }
   to   { transform: translateX(2%);  opacity: 1.0; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FOREST NIGHT — Enhanced multi-layer system
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.fn-moon {
+  box-shadow:
+    0 0 0 3px rgba(255, 248, 200, 0.10),
+    0 0 22px 7px  rgba(255, 240, 160, 0.28),
+    0 0 65px 22px rgba(255, 220, 100, 0.12),
+    0 0 130px 50px rgba(255, 190, 70, 0.06);
+  animation: fnMoonGlow 9s ease-in-out infinite alternate;
+}
+
+.fn-trees-far {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 65%;
+  background:
+    radial-gradient(ellipse  8% 38% at  4% 100%, rgba(4,  8, 4, 0.65) 0%, transparent 100%),
+    radial-gradient(ellipse 10% 46% at 16% 100%, rgba(3,  6, 3, 0.60) 0%, transparent 100%),
+    radial-gradient(ellipse  7% 32% at 28% 100%, rgba(4,  8, 4, 0.62) 0%, transparent 100%),
+    radial-gradient(ellipse 13% 52% at 44% 100%, rgba(2,  5, 2, 0.58) 0%, transparent 100%),
+    radial-gradient(ellipse  9% 40% at 60% 100%, rgba(4,  8, 4, 0.62) 0%, transparent 100%),
+    radial-gradient(ellipse 11% 44% at 75% 100%, rgba(3,  6, 3, 0.60) 0%, transparent 100%),
+    radial-gradient(ellipse  8% 35% at 90% 100%, rgba(4,  8, 4, 0.65) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.fn-mid-mist {
+  position: absolute;
+  bottom: 35%; left: 0; right: 0;
+  height: 18%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(70, 95, 65, 0.08) 45%,
+    rgba(55, 80, 50, 0.14) 65%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: mistDrift 20s ease-in-out infinite alternate;
+}
+
+.fn-trees-mid {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 52%;
+  background:
+    radial-gradient(ellipse  9% 30% at 10% 100%, rgba(8,  15, 8, 0.82) 0%, transparent 100%),
+    radial-gradient(ellipse 12% 40% at 24% 100%, rgba(7,  13, 7, 0.80) 0%, transparent 100%),
+    radial-gradient(ellipse  9% 28% at 40% 100%, rgba(8,  15, 8, 0.82) 0%, transparent 100%),
+    radial-gradient(ellipse 15% 46% at 57% 100%, rgba(6,  11, 6, 0.78) 0%, transparent 100%),
+    radial-gradient(ellipse 10% 34% at 73% 100%, rgba(8,  15, 8, 0.82) 0%, transparent 100%),
+    radial-gradient(ellipse  9% 30% at 88% 100%, rgba(7,  13, 7, 0.80) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.fn-ground-mist {
+  position: absolute;
+  bottom: 10%; left: 0; right: 0;
+  height: 22%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(55, 80, 50, 0.12) 35%,
+    rgba(45, 68, 40, 0.20) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: mistDrift 14s ease-in-out 3s infinite alternate;
+}
+
+.fn-trees-near {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 38%;
+  background:
+    radial-gradient(ellipse 11% 32% at  0% 100%, rgba(12, 22, 12, 0.95) 0%, transparent 100%),
+    radial-gradient(ellipse 15% 44% at 14% 100%, rgba(10, 19, 10, 0.92) 0%, transparent 100%),
+    radial-gradient(ellipse 11% 30% at 32% 100%, rgba(12, 22, 12, 0.95) 0%, transparent 100%),
+    radial-gradient(ellipse 18% 50% at 52% 100%, rgba( 9, 17,  9, 0.90) 0%, transparent 100%),
+    radial-gradient(ellipse 13% 38% at 70% 100%, rgba(11, 20, 11, 0.92) 0%, transparent 100%),
+    radial-gradient(ellipse 12% 34% at 86% 100%, rgba(10, 19, 10, 0.93) 0%, transparent 100%),
+    radial-gradient(ellipse 10% 28% at 100%100%, rgba(12, 22, 12, 0.95) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.fn-star {
+  box-shadow: 0 0 5px rgba(200, 220, 255, 0.6);
+}
+
+.fn-firefly {
+  position: absolute;
+  width: 3px; height: 3px;
+  background: rgba(180, 255, 130, 0.95);
+  border-radius: 50%;
+  box-shadow:
+    0 0 5px 2px rgba(150, 230, 100, 0.55),
+    0 0 12px 5px rgba(120, 200, 80, 0.22);
+  animation: fnFireflyFloat ease-in-out infinite;
+}
+
+@keyframes fnMoonGlow {
+  from { filter: brightness(1.00); }
+  to   { filter: brightness(1.10); }
+}
+
+@keyframes fnFireflyFloat {
+  0%   { opacity: 0;   transform: translate( 0px,   0px); }
+  18%  { opacity: 1;   transform: translate( 7px,  -9px); }
+  42%  { opacity: 0.7; transform: translate(-9px, -18px); }
+  68%  { opacity: 1;   transform: translate(11px, -26px); }
+  88%  { opacity: 0.3; transform: translate(-4px, -32px); }
+  100% { opacity: 0;   transform: translate( 2px, -38px); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SNOWY CABIN — CSS snowflakes + pine silhouettes
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sc-ground {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 32%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(195, 218, 238, 0.55) 40%,
+    rgba(215, 232, 248, 0.80) 100%
+  );
+  pointer-events: none;
+}
+
+.sc-snowbank {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 14%;
+  background: radial-gradient(
+    ellipse 100% 100% at 50% 100%,
+    rgba(230, 242, 252, 0.90) 0%,
+    rgba(210, 228, 245, 0.70) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.sc-pines {
+  position: absolute;
+  bottom: 10%; left: 0; right: 0;
+  height: 55%;
+  background:
+    /* Cluster of pine triangles via radial gradients */
+    radial-gradient(ellipse  5% 30% at  8% 100%, rgba(10, 22, 12, 0.88) 0%, transparent 100%),
+    radial-gradient(ellipse  7% 40% at 18% 100%, rgba( 8, 18, 10, 0.85) 0%, transparent 100%),
+    radial-gradient(ellipse  5% 28% at 30% 100%, rgba(10, 22, 12, 0.88) 0%, transparent 100%),
+    radial-gradient(ellipse  9% 45% at 48% 100%, rgba( 7, 16,  9, 0.82) 0%, transparent 100%),
+    radial-gradient(ellipse  6% 35% at 65% 100%, rgba( 9, 20, 11, 0.86) 0%, transparent 100%),
+    radial-gradient(ellipse  8% 42% at 80% 100%, rgba( 8, 18, 10, 0.84) 0%, transparent 100%),
+    radial-gradient(ellipse  5% 30% at 93% 100%, rgba(10, 22, 12, 0.88) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* CSS-drawn snowflake (not emoji) */
+.sc-snow-particle {
+  position: absolute;
+  top: -15px;
+  width:  var(--flake-size);
+  height: var(--flake-size);
+  animation: scSnowFall linear infinite;
+}
+
+/* Horizontal arm */
+.sc-snow-particle::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 0;
+  width: 100%; height: 1.5px;
+  background: rgba(225, 238, 252, 0.90);
+  transform: translateY(-50%);
+  border-radius: 1px;
+  box-shadow:
+    /* Diagonal arms at 60° */
+    0 0 0 0,
+    calc(var(--flake-size) * 0.22) calc(var(--flake-size) * -0.38) 0 0 rgba(225,238,252,0.80),
+    calc(var(--flake-size) * -0.22) calc(var(--flake-size) * -0.38) 0 0 rgba(225,238,252,0.80),
+    calc(var(--flake-size) * 0.22) calc(var(--flake-size) * 0.38) 0 0 rgba(225,238,252,0.80),
+    calc(var(--flake-size) * -0.22) calc(var(--flake-size) * 0.38) 0 0 rgba(225,238,252,0.80);
+}
+
+/* Vertical arm */
+.sc-snow-particle::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 1.5px; height: 100%;
+  background: rgba(225, 238, 252, 0.90);
+  transform: translateX(-50%);
+  border-radius: 1px;
+}
+
+.sc-snow-drift {
+  position: absolute;
+  bottom: 12%; left: 0; right: 0;
+  height: 8%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(220, 235, 250, 0.22) 100%
+  );
+  pointer-events: none;
+  animation: scDriftShift 12s ease-in-out infinite alternate;
+}
+
+@keyframes scSnowFall {
+  0%   { transform: translateY(-20px) translateX(0)    rotate(0deg);   opacity: 0; }
+  8%   { opacity: 1; }
+  50%  { transform: translateY(45vh)  translateX(18px) rotate(180deg); }
+  90%  { opacity: 0.75; }
+  100% { transform: translateY(105vh) translateX(-8px) rotate(360deg); opacity: 0; }
+}
+
+@keyframes scDriftShift {
+  from { transform: translateX(-1.5%); }
+  to   { transform: translateX( 1.5%); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RAINY CITY — Angled streaks, buildings, neon
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.rc-buildings-far {
+  position: absolute;
+  bottom: 20%; left: 0; right: 0;
+  height: 45%;
+  background:
+    radial-gradient(ellipse  4%  35% at  5% 100%, rgba(18,20,28,0.75) 0%, transparent 100%),
+    radial-gradient(ellipse  6%  50% at 14% 100%, rgba(14,16,24,0.70) 0%, transparent 100%),
+    radial-gradient(ellipse  5%  42% at 24% 100%, rgba(16,18,26,0.72) 0%, transparent 100%),
+    radial-gradient(ellipse  8%  58% at 36% 100%, rgba(12,14,22,0.68) 0%, transparent 100%),
+    radial-gradient(ellipse  5%  40% at 48% 100%, rgba(15,17,25,0.72) 0%, transparent 100%),
+    radial-gradient(ellipse  7%  52% at 60% 100%, rgba(13,15,23,0.70) 0%, transparent 100%),
+    radial-gradient(ellipse  5%  38% at 72% 100%, rgba(16,18,26,0.72) 0%, transparent 100%),
+    radial-gradient(ellipse  6%  46% at 83% 100%, rgba(14,16,24,0.70) 0%, transparent 100%),
+    radial-gradient(ellipse  4%  32% at 94% 100%, rgba(18,20,28,0.75) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.rc-buildings-near {
+  position: absolute;
+  bottom: 18%; left: 0; right: 0;
+  height: 35%;
+  background:
+    radial-gradient(ellipse  5%  30% at  2% 100%, rgba(10,12,18,0.92) 0%, transparent 100%),
+    radial-gradient(ellipse  8%  42% at 12% 100%, rgba( 8,10,16,0.90) 0%, transparent 100%),
+    radial-gradient(ellipse  6%  35% at 25% 100%, rgba(10,12,18,0.92) 0%, transparent 100%),
+    radial-gradient(ellipse 10%  50% at 40% 100%, rgba( 7, 9,15,0.88) 0%, transparent 100%),
+    radial-gradient(ellipse  6%  38% at 55% 100%, rgba( 9,11,17,0.90) 0%, transparent 100%),
+    radial-gradient(ellipse  8%  44% at 68% 100%, rgba( 8,10,16,0.90) 0%, transparent 100%),
+    radial-gradient(ellipse  6%  36% at 80% 100%, rgba(10,12,18,0.92) 0%, transparent 100%),
+    radial-gradient(ellipse  5%  30% at 92% 100%, rgba(10,12,18,0.92) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Angled rain */
+.rc-raindrop {
+  position: absolute;
+  top: -5%;
+  width: 1.5px;
+  background: linear-gradient(175deg, transparent 0%, rgba(145, 192, 252, 0.68) 100%);
+  transform: skewX(-12deg);
+  animation: rcRainFall linear infinite;
+}
+
+.rc-puddle-reflect {
+  position: absolute;
+  bottom: 16%; left: 0; right: 0;
+  height: 6%;
+  background:
+    radial-gradient(ellipse 12% 100% at 22% 100%, rgba(255,180, 60,0.12) 0%, transparent 100%),
+    radial-gradient(ellipse  8% 100% at 48% 100%, rgba(120,180,255,0.10) 0%, transparent 100%),
+    radial-gradient(ellipse 10% 100% at 72% 100%, rgba(255,140, 50,0.11) 0%, transparent 100%);
+  pointer-events: none;
+  animation: rcPuddleShimmer 3s ease-in-out infinite alternate;
+}
+
+.rc-neon-glow {
+  position: absolute;
+  bottom: 20%; left: 0; right: 0;
+  height: 30%;
+  background:
+    radial-gradient(ellipse 8% 20% at 30% 50%, rgba(255, 50, 80, 0.10) 0%, transparent 100%),
+    radial-gradient(ellipse 6% 15% at 62% 45%, rgba(50, 180, 255, 0.08) 0%, transparent 100%),
+    radial-gradient(ellipse 7% 18% at 82% 55%, rgba(180, 50, 255, 0.07) 0%, transparent 100%);
+  pointer-events: none;
+  animation: rcNeonFlicker 5s ease-in-out infinite alternate;
+}
+
+@keyframes rcRainFall {
+  0%   { transform: skewX(-12deg) translateY(-20px); opacity: 0; }
+  6%   { opacity: 1; }
+  94%  { opacity: 0.55; }
+  100% { transform: skewX(-12deg) translateY(110vh); opacity: 0; }
+}
+
+@keyframes rcPuddleShimmer {
+  from { opacity: 0.6; transform: scaleX(0.97); }
+  to   { opacity: 1.0; transform: scaleX(1.03); }
+}
+
+@keyframes rcNeonFlicker {
+  0%, 100% { opacity: 0.80; }
+  30%  { opacity: 1.00; }
+  55%  { opacity: 0.65; }
+  75%  { opacity: 0.90; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   AUTUMN GARDEN — CSS leaves, bare trees
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.ag-ground {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 22%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(70, 32, 8, 0.45) 55%,
+    rgba(55, 24, 5, 0.68) 100%
+  );
+  pointer-events: none;
+}
+
+.ag-trees {
+  position: absolute;
+  bottom: 12%; left: 0; right: 0;
+  height: 62%;
+  background:
+    /* Bare tree trunks + sparse canopy */
+    radial-gradient(ellipse  4% 50% at 12% 100%, rgba(22,14, 6,0.90) 0%, transparent 100%),
+    radial-gradient(ellipse 12% 22% at 12%  40%, rgba(18,12, 5,0.45) 0%, transparent 100%),
+    radial-gradient(ellipse  4% 48% at 35% 100%, rgba(20,12, 5,0.88) 0%, transparent 100%),
+    radial-gradient(ellipse 14% 20% at 35%  36%, rgba(16,10, 4,0.40) 0%, transparent 100%),
+    radial-gradient(ellipse  4% 52% at 62% 100%, rgba(22,14, 6,0.90) 0%, transparent 100%),
+    radial-gradient(ellipse 12% 22% at 62%  38%, rgba(18,12, 5,0.42) 0%, transparent 100%),
+    radial-gradient(ellipse  4% 45% at 86% 100%, rgba(20,12, 5,0.88) 0%, transparent 100%),
+    radial-gradient(ellipse 11% 18% at 86%  42%, rgba(16,10, 4,0.38) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* CSS leaf — diamond shape with color variation */
+.ag-leaf {
+  position: absolute;
+  top: -20px;
+  animation: agLeafFall ease-in-out infinite;
+  pointer-events: none;
+}
+
+.leaf-type-1 {
+  width: 12px; height: 16px;
+  background: linear-gradient(135deg, hsl(var(--hue), 80%, 45%) 0%, hsl(var(--hue), 65%, 30%) 100%);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.leaf-type-2 {
+  width: 14px; height: 10px;
+  background: linear-gradient(120deg, hsl(var(--hue), 75%, 40%) 0%, hsl(var(--hue), 60%, 28%) 100%);
+  border-radius: 0% 80% 0% 80%;
+}
+
+.leaf-type-3 {
+  width: 10px; height: 14px;
+  background: linear-gradient(150deg, hsl(calc(var(--hue) + 15deg), 70%, 42%) 0%, hsl(calc(var(--hue) + 15deg), 55%, 28%) 100%);
+  clip-path: ellipse(50% 50% at 50% 50%);
+  border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%;
+}
+
+.ag-leaf-pile {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 12%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(130, 55, 10, 0.40) 100%
+  );
+  pointer-events: none;
+}
+
+@keyframes agLeafFall {
+  0%   { transform: translateY(-20px)  rotate(  0deg) translateX(  0px);  opacity: 0; }
+  10%  { opacity: 1; }
+  30%  { transform: translateY(25vh)   rotate( 95deg) translateX( 22px); }
+  55%  { transform: translateY(55vh)   rotate(200deg) translateX(-18px); }
+  80%  { transform: translateY(80vh)   rotate(285deg) translateX( 12px);  opacity: 0.65; }
+  100% { transform: translateY(105vh)  rotate(370deg) translateX( -8px);  opacity: 0; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   OCEAN COAST — Multi-layer waves, shore mist
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.oc-water-deep {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 52%;
+  background: linear-gradient(
+    180deg,
+    rgba(12, 58, 98, 0.50) 0%,
+    rgba( 8, 45, 80, 0.75) 50%,
+    rgba( 5, 32, 62, 0.95) 100%
+  );
+  pointer-events: none;
+}
+
+.oc-water-mid {
+  position: absolute;
+  bottom: 10%; left: 0; right: 0;
+  height: 30%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent                   0px,
+      transparent                   35px,
+      rgba(60, 130, 190, 0.06)      36px,
+      rgba(60, 130, 190, 0.06)      38px
+    );
+  animation: ocSurfaceScroll 6s linear infinite;
+  pointer-events: none;
+}
+
+.oc-wave {
+  position: absolute;
+  left: -8%; right: -8%;
+  height: 14px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(170, 215, 240, 0.20) 15%,
+    rgba(200, 232, 255, 0.42) 50%,
+    rgba(170, 215, 240, 0.20) 85%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: ocWaveRoll ease-in-out infinite;
+  pointer-events: none;
+}
+
+.oc-shore-mist {
+  position: absolute;
+  bottom: 4%; left: 0; right: 0;
+  height: 15%;
+  background: linear-gradient(
+    0deg,
+    rgba(180, 210, 230, 0.18) 0%,
+    rgba(160, 195, 218, 0.10) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: mistDrift 14s ease-in-out infinite alternate;
+}
+
+@keyframes ocSurfaceScroll {
+  from { background-position: 0 0; }
+  to   { background-position: 74px 0; }
+}
+
+@keyframes ocWaveRoll {
+  0%   { transform: translateX(-6%) scaleY(0.75); opacity: 0; }
+  14%  { opacity: 1; }
+  80%  { opacity: 0.55; }
+  100% { transform: translateX( 6%) scaleY(1.25); opacity: 0; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   THUNDERSTORM — Storm clouds, heavy diagonal rain, lightning bolt
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.ts-clouds-far {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 60%;
+  background:
+    radial-gradient(ellipse 70% 45% at 35% 15%, rgba(22,14,38,0.90) 0%, transparent 100%),
+    radial-gradient(ellipse 55% 38% at 72% 10%, rgba(18,10,34,0.85) 0%, transparent 100%),
+    radial-gradient(ellipse 80% 35% at 50% 32%, rgba(16, 8,32,0.80) 0%, transparent 100%);
+  animation: tsCloudDrift 14s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.ts-clouds-near {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 45%;
+  background:
+    radial-gradient(ellipse 50% 40% at 20% 20%, rgba(12, 6,28,0.92) 0%, transparent 100%),
+    radial-gradient(ellipse 65% 35% at 65% 12%, rgba(10, 4,26,0.88) 0%, transparent 100%),
+    radial-gradient(ellipse 40% 30% at 85% 28%, rgba(12, 6,28,0.85) 0%, transparent 100%);
+  animation: tsCloudDrift 9s ease-in-out 2s infinite alternate;
+  pointer-events: none;
+}
+
+/* Heavy diagonal rain */
+.ts-raindrop {
+  position: absolute;
+  top: -5%;
+  width: 1.5px;
+  background: linear-gradient(172deg, transparent 0%, rgba(130, 180, 255, 0.72) 100%);
+  transform: skewX(-14deg);
+  animation: tsRainHeavy linear infinite;
+}
+
+/* Lightning bolt shape via clip-path */
+.ts-lightning-bolt {
+  position: absolute;
+  top: 8%; left: 58%;
+  width: 12px;
+  height: 55px;
+  background: linear-gradient(
+    180deg,
+    rgba(220, 235, 255, 0.95) 0%,
+    rgba(180, 210, 255, 0.80) 100%
+  );
+  clip-path: polygon(60% 0%, 100% 0%, 40% 48%, 80% 48%, 0% 100%, 35% 55%, 10% 55%);
+  filter: blur(0.5px);
+  box-shadow: 0 0 12px 4px rgba(180, 210, 255, 0.50);
+  animation: tsBoltFlash 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.ts-lightning-flash {
+  position: absolute;
+  inset: 0;
+  background: rgba(190, 215, 255, 0);
+  animation: tsFlashPulse 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes tsCloudDrift {
+  from { transform: translateX(0%); }
+  to   { transform: translateX(2.5%); }
+}
+
+@keyframes tsRainHeavy {
+  0%   { transform: skewX(-14deg) translateY(-20px); opacity: 0; }
+  5%   { opacity: 1; }
+  93%  { opacity: 0.65; }
+  100% { transform: skewX(-14deg) translateY(110vh); opacity: 0; }
+}
+
+@keyframes tsBoltFlash {
+  0%, 84%, 88%, 93%, 100% { opacity: 0; }
+  85%  { opacity: 1.0; }
+  86%  { opacity: 0.2; }
+  87%  { opacity: 0.8; }
+  89%  { opacity: 0.0; }
+  91%  { opacity: 0.6; }
+}
+
+@keyframes tsFlashPulse {
+  0%, 84%, 88%, 93%, 100% { background: rgba(190,215,255,0);    }
+  85%  { background: rgba(190,215,255,0.18); }
+  86%  { background: rgba(190,215,255,0.04); }
+  87%  { background: rgba(190,215,255,0.12); }
+  89%  { background: rgba(190,215,255,0.00); }
+  91%  { background: rgba(190,215,255,0.08); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   COFFEE SHOP — Warm interior, steam columns, condensation
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.cs-interior-glow {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 70%;
+  background:
+    radial-gradient(ellipse 55% 50% at 30% 65%, rgba(255, 175, 55, 0.14) 0%, transparent 100%),
+    radial-gradient(ellipse 40% 40% at 68% 58%, rgba(255, 160, 40, 0.11) 0%, transparent 100%),
+    radial-gradient(ellipse 30% 30% at 84% 68%, rgba(255, 195, 75, 0.09) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.cs-window-fog {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 28%;
+  background: linear-gradient(
+    0deg,
+    rgba(195, 215, 230, 0.20) 0%,
+    rgba(185, 208, 225, 0.10) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Steam column */
+.cs-steam-col {
+  position: absolute;
+  bottom: 28%;
+  width: 10px;
+  height: 50px;
+  animation: csSteamRise 3.5s ease-in-out infinite;
+}
+
+.cs-steam-col::before,
+.cs-steam-col::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  width: 7px;
+  height: 28px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(245, 235, 220, 0.18) 40%,
+    rgba(235, 225, 210, 0.10) 75%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+.cs-steam-col::before { left: 0;  animation: csSteamWiggle 2.2s ease-in-out infinite; }
+.cs-steam-col::after  { left: 4px; animation: csSteamWiggle 2.2s ease-in-out 0.85s infinite; }
+
+.cs-cup-glow {
+  position: absolute;
+  bottom: 22%; left: 35%;
+  width: 30%; height: 5%;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(255, 165, 45, 0.18) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: csCupGlowPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes csSteamRise {
+  0%, 100% { opacity: 0; transform: translateY(  0px); }
+  20%  { opacity: 1; }
+  80%  { opacity: 0.25; transform: translateY(-32px); }
+}
+
+@keyframes csSteamWiggle {
+  0%, 100% { transform: translateX(  0px) scaleX(1.0); }
+  50%       { transform: translateX( 4px) scaleX(1.4); }
+}
+
+@keyframes csCupGlowPulse {
+  from { opacity: 0.70; transform: scaleX(0.94); }
+  to   { opacity: 1.00; transform: scaleX(1.06); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MOUNTAIN PEAK — Aurora, multi-ridge silhouettes, shooting star
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.mp-aurora {
+  position: absolute;
+  top: 5%; left: 0; right: 0;
+  height: 42%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba( 30, 200, 120, 0.10) 30%,
+    rgba( 20, 180, 100, 0.16) 55%,
+    rgba( 60, 220, 150, 0.08) 75%,
+    transparent 100%
+  );
+  transform: skewY(-5deg) scaleX(1.1);
+  animation: mpAurora1 12s ease-in-out infinite alternate;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.mp-aurora-2 {
+  position: absolute;
+  top: 8%; left: -10%; right: -10%;
+  height: 38%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba( 80, 120, 240, 0.07) 35%,
+    rgba( 60, 100, 220, 0.12) 58%,
+    rgba(120, 160, 255, 0.06) 75%,
+    transparent 100%
+  );
+  transform: skewY(4deg);
+  animation: mpAurora2 16s ease-in-out 3s infinite alternate;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.mp-ridge-far {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 68%;
+  background:
+    radial-gradient(ellipse 40% 55% at 20% 100%, rgba(10,14,26,0.60) 0%, transparent 65%),
+    radial-gradient(ellipse 52% 65% at 52% 100%, rgba( 8,11,22,0.55) 0%, transparent 70%),
+    radial-gradient(ellipse 38% 52% at 82% 100%, rgba(10,14,26,0.58) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.mp-ridge-mid {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 58%;
+  background:
+    radial-gradient(ellipse 38% 50% at 15% 100%, rgba(14,18,32,0.78) 0%, transparent 65%),
+    radial-gradient(ellipse 48% 62% at 50% 100%, rgba(11,15,28,0.74) 0%, transparent 68%),
+    radial-gradient(ellipse 36% 48% at 85% 100%, rgba(13,17,30,0.76) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.mp-ridge-near {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 46%;
+  background:
+    radial-gradient(ellipse 35% 44% at 10% 100%, rgba(18,22,38,0.92) 0%, transparent 68%),
+    radial-gradient(ellipse 44% 56% at 48% 100%, rgba(14,18,34,0.88) 0%, transparent 70%),
+    radial-gradient(ellipse 32% 42% at 88% 100%, rgba(16,20,36,0.90) 0%, transparent 68%);
+  pointer-events: none;
+}
+
+.mp-milky-way {
+  opacity: 0.8;
+}
+
+.mp-star {
+  box-shadow: 0 0 4px rgba(200, 220, 255, 0.55);
+}
+
+/* Shooting star */
+.mp-shooting-star {
+  position: absolute;
+  top: 12%; left: 20%;
+  width: 60px; height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(220, 235, 255, 0.60) 40%,
+    transparent 100%
+  );
+  border-radius: 1px;
+  filter: blur(0.5px);
+  animation: mpShootingStar 14s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes mpAurora1 {
+  0%   { opacity: 0.5; transform: skewY(-5deg)  scaleX(1.05) translateX( -3%); }
+  50%  { opacity: 1.0; transform: skewY(-3deg)  scaleX(1.12) translateX(  2%); }
+  100% { opacity: 0.6; transform: skewY(-6deg)  scaleX(1.08) translateX( -1%); }
+}
+
+@keyframes mpAurora2 {
+  0%   { opacity: 0.4; transform: skewY( 4deg) translateX( 2%); }
+  100% { opacity: 0.9; transform: skewY( 2deg) translateX(-2%); }
+}
+
+@keyframes mpShootingStar {
+  0%   { opacity: 0; transform: translate(  0px,   0px) rotate(-25deg); }
+  2%   { opacity: 1; }
+  5%   { opacity: 0; transform: translate(140px, -55px) rotate(-25deg); }
+  100% { opacity: 0; transform: translate(140px, -55px) rotate(-25deg); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   JAPANESE GARDEN — Pond reflection, stone lantern, CSS petals
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.jg-pond {
+  position: absolute;
+  bottom: 8%; left: 12%; right: 30%;
+  height: 14%;
+  background: radial-gradient(
+    ellipse 100% 100% at 50% 100%,
+    rgba(20, 45, 35, 0.85) 0%,
+    rgba(14, 36, 28, 0.70) 50%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  box-shadow: 0 0 20px 4px rgba(10, 30, 22, 0.35);
+  pointer-events: none;
+  animation: jgPondShimmer 6s ease-in-out infinite alternate;
+}
+
+.jg-bamboo-leaves {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40%;
+  background:
+    radial-gradient(ellipse 6% 18% at 28% 0%, rgba(14,38,20,0.55) 0%, transparent 100%),
+    radial-gradient(ellipse 5% 14% at 32% 0%, rgba(16,42,22,0.45) 0%, transparent 100%),
+    radial-gradient(ellipse 6% 16% at 54% 0%, rgba(14,38,20,0.50) 0%, transparent 100%),
+    radial-gradient(ellipse 5% 12% at 60% 0%, rgba(16,42,22,0.42) 0%, transparent 100%),
+    radial-gradient(ellipse 7% 20% at 76% 0%, rgba(14,38,20,0.52) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Stone lantern body */
+.jg-lantern-body {
+  position: absolute;
+  bottom: 22%; left: 16%;
+  width: 16px; height: 28px;
+  background: linear-gradient(
+    90deg,
+    rgba(90,80,65,0.85) 0%,
+    rgba(115,100,82,0.90) 35%,
+    rgba(105,92,75,0.88) 65%,
+    rgba(82,72,58,0.84) 100%
+  );
+  border-radius: 2px 2px 3px 3px;
+  box-shadow: 1px 2px 8px rgba(0,0,0,0.45);
+  pointer-events: none;
+}
+
+/* CSS cherry blossom petal */
+.jg-petal {
+  position: absolute;
+  top: -15px;
+  width:  var(--petal-size);
+  height: var(--petal-size);
+  background: radial-gradient(
+    circle at 35% 40%,
+    hsl(var(--petal-hue), 80%, 88%) 0%,
+    hsl(var(--petal-hue), 70%, 78%) 50%,
+    hsl(var(--petal-hue), 60%, 68%) 100%
+  );
+  border-radius: 50% 30% 50% 30%;
+  opacity: 0;
+  animation: jgPetalDrift ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes jgPondShimmer {
+  from { opacity: 0.75; transform: scaleX(0.97) scaleY(0.95); }
+  to   { opacity: 1.00; transform: scaleX(1.03) scaleY(1.05); }
+}
+
+@keyframes jgPetalDrift {
+  0%   { opacity: 0;   transform: translateY(  0px) rotate(  0deg) translateX(  0px); }
+  10%  { opacity: 0.7; }
+  35%  { transform: translateY( 28vh) rotate( 90deg) translateX( 16px); }
+  65%  { transform: translateY( 60vh) rotate(200deg) translateX(-12px); }
+  90%  { opacity: 0.3; }
+  100% { opacity: 0;   transform: translateY( 90vh) rotate(300deg) translateX(  8px); }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   DEEP FOREST — Multi-layer canopy, light rays, colored spores
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.df-canopy-far {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 55%;
+  background:
+    radial-gradient(ellipse 45% 40% at 25%  0%, rgba(5,12,6,0.92) 0%, transparent 100%),
+    radial-gradient(ellipse 55% 46% at 62%  0%, rgba(4,10,5,0.88) 0%, transparent 100%),
+    radial-gradient(ellipse 38% 34% at 88%  5%, rgba(5,12,6,0.84) 0%, transparent 100%),
+    radial-gradient(ellipse 32% 28% at  8% 10%, rgba(4,10,5,0.80) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.df-canopy-mid {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 45%;
+  background:
+    radial-gradient(ellipse 40% 36% at 15%  2%, rgba(7,17,8,0.88) 0%, transparent 100%),
+    radial-gradient(ellipse 50% 42% at 55%  0%, rgba(6,14,7,0.85) 0%, transparent 100%),
+    radial-gradient(ellipse 36% 32% at 90%  6%, rgba(7,17,8,0.82) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.df-canopy-near {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 35%;
+  background:
+    radial-gradient(ellipse 35% 32% at 10%  0%, rgba(9,22,10,0.95) 0%, transparent 100%),
+    radial-gradient(ellipse 45% 38% at 48%  0%, rgba(8,19, 9,0.92) 0%, transparent 100%),
+    radial-gradient(ellipse 32% 28% at 88%  0%, rgba(9,22,10,0.90) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.df-trunks {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 55%;
+  background:
+    radial-gradient(ellipse  3% 50% at 12% 100%, rgba(5,10,5,0.95) 0%, transparent 100%),
+    radial-gradient(ellipse  4% 62% at 30% 100%, rgba(4, 9,4,0.92) 0%, transparent 100%),
+    radial-gradient(ellipse  3% 48% at 50% 100%, rgba(5,10,5,0.95) 0%, transparent 100%),
+    radial-gradient(ellipse  4% 58% at 70% 100%, rgba(4, 9,4,0.92) 0%, transparent 100%),
+    radial-gradient(ellipse  3% 45% at 88% 100%, rgba(5,10,5,0.94) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.df-fog-low {
+  position: absolute;
+  bottom: 18%; left: 0; right: 0;
+  height: 20%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(40, 75, 45, 0.14) 40%,
+    rgba(32, 62, 38, 0.22) 65%,
+    transparent 100%
+  );
+  animation: mistDrift 12s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.df-fog-mid {
+  position: absolute;
+  bottom: 38%; left: 0; right: 0;
+  height: 15%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(35, 65, 40, 0.08) 40%,
+    rgba(28, 55, 34, 0.14) 65%,
+    transparent 100%
+  );
+  animation: mistDrift 18s ease-in-out 4s infinite alternate;
+  pointer-events: none;
+}
+
+/* Glowing spore with custom color */
+.df-spore {
+  position: absolute;
+  width: 3px; height: 3px;
+  background: var(--spore-color, rgba(100,220,120,0.85));
+  border-radius: 50%;
+  box-shadow:
+    0 0 5px 2px rgba(80, 180, 100, 0.45),
+    0 0 12px 5px rgba(60, 150, 80, 0.20);
+  animation: dfSporeDrift ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Light rays from canopy */
+.df-light-rays {
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 70%;
+  background:
+    linear-gradient(175deg, rgba(120,180,100,0.06) 0%, transparent 55%),
+    linear-gradient(165deg, rgba(140,200,120,0.04) 0%, transparent 60%),
+    linear-gradient(185deg, rgba(110,170, 90,0.05) 0%, transparent 52%);
+  pointer-events: none;
+  animation: dfRayShimmer 8s ease-in-out infinite alternate;
+  mix-blend-mode: screen;
+}
+
+@keyframes dfSporeDrift {
+  0%   { opacity: 0;   transform: translate(  0px,   0px) scale(0.5); }
+  22%  { opacity: 1;   transform: translate(  7px, -11px) scale(1.1); }
+  48%  { opacity: 0.7; transform: translate( -6px, -22px) scale(0.9); }
+  72%  { opacity: 0.4; transform: translate( 11px, -33px) scale(0.7); }
+  100% { opacity: 0;   transform: translate( -3px, -44px) scale(0.4); }
+}
+
+@keyframes dfRayShimmer {
+  from { opacity: 0.5; transform: scaleX(0.95) translateX(-1%); }
+  to   { opacity: 1.0; transform: scaleX(1.05) translateX( 1%); }
 }

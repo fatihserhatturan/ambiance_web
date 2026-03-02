@@ -1,0 +1,146 @@
+/* ═══════════════════════════════════════════════════
+   WIND CHIMES — Metallic tubes with gentle sway
+   ═══════════════════════════════════════════════════ */
+
+.wc-wrap {
+  position: relative;
+  width:  calc(130px * var(--size));
+  height: calc(180px * var(--size));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Top bar ── */
+.wc-bar {
+  width: 95%;
+  height: calc(9px * var(--size));
+  background: linear-gradient(
+    180deg,
+    #c8a840 0%,
+    #d4b448 30%,
+    #b89030 70%,
+    #a07828 100%
+  );
+  border-radius: 3px;
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 235, 160, 0.25),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.20);
+  flex-shrink: 0;
+}
+
+/* ── Clapper cord (hangs from center of bar) ── */
+.wc-clapper-cord {
+  width: 1px;
+  height: calc(55px * var(--size));
+  background: rgba(190, 165, 110, 0.65);
+  animation: wcCoreCord var(--sway-speed) ease-in-out infinite alternate;
+}
+
+/* ── Clapper sail (wind catcher) ── */
+.wc-clapper-sail {
+  width: calc(22px * var(--size));
+  height: calc(14px * var(--size));
+  background: linear-gradient(
+    135deg,
+    rgba(210, 185, 130, 0.75) 0%,
+    rgba(185, 158, 105, 0.65) 100%
+  );
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  animation: wcCoreCord var(--sway-speed) ease-in-out infinite alternate;
+}
+
+/* ── Tubes container ── */
+.wc-tubes {
+  position: absolute;
+  top: calc(9px * var(--size));
+  left: 0; right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 0 4px;
+}
+
+/* ── Individual chime unit ── */
+.wc-chime-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: top center;
+}
+
+.sway-pos { animation: wcSwayPos var(--sway-speed) ease-in-out infinite alternate; }
+.sway-neg { animation: wcSwayNeg var(--sway-speed) ease-in-out infinite alternate; }
+
+/* ── String ── */
+.wc-string {
+  width: 1px;
+  height: calc(14px * var(--size));
+  background: linear-gradient(
+    180deg,
+    rgba(200, 175, 120, 0.80) 0%,
+    rgba(180, 155, 100, 0.55) 100%
+  );
+}
+
+/* ── Metallic tube ── */
+.wc-tube {
+  width: calc(9px * var(--size));
+  background: linear-gradient(
+    90deg,
+    rgba(160, 140,  90, 0.65) 0%,
+    rgba(220, 200, 145, 0.92) 22%,
+    rgba(240, 225, 175, 0.98) 45%,
+    rgba(215, 195, 140, 0.90) 68%,
+    rgba(170, 148, 100, 0.70) 85%,
+    rgba(140, 120,  75, 0.55) 100%
+  );
+  border-radius: 4px;
+  box-shadow:
+    inset -2px 0 5px rgba(0, 0, 0, 0.18),
+    inset  2px 0 4px rgba(255, 255, 255, 0.28),
+    0 4px 10px rgba(0, 0, 0, 0.30);
+}
+
+/* Tube top cap */
+.wc-tube::before {
+  content: '';
+  position: absolute;
+  top: -3px; left: 50%;
+  transform: translateX(-50%);
+  width: calc(11px * var(--size));
+  height: calc(5px * var(--size));
+  background: rgba(200, 178, 120, 0.90);
+  border-radius: 2px 2px 0 0;
+}
+
+/* ── Bottom cap ── */
+.wc-cap {
+  width: calc(11px * var(--size));
+  height: calc(5px * var(--size));
+  background: linear-gradient(
+    180deg,
+    rgba(200, 178, 120, 0.90) 0%,
+    rgba(160, 138, 85, 0.75) 100%
+  );
+  border-radius: 0 0 3px 3px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
+}
+
+/* ═══ KEYFRAMES ═══ */
+@keyframes wcSwayPos {
+  from { transform: rotate(calc(var(--sway-angle) * -0.5)); }
+  to   { transform: rotate(var(--sway-angle)); }
+}
+
+@keyframes wcSwayNeg {
+  from { transform: rotate(var(--sway-angle)); }
+  to   { transform: rotate(calc(var(--sway-angle) * -0.5)); }
+}
+
+@keyframes wcCoreCord {
+  from { transform: rotate(-4deg); }
+  to   { transform: rotate( 4deg); }
+}

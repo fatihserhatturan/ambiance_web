@@ -1,0 +1,325 @@
+/* ═══════════════════════════════════════════════════
+   CANDLE — Realistic CSS candle with layered flame
+   ═══════════════════════════════════════════════════ */
+
+.candle-wrap {
+  position: relative;
+  width: calc(70px * var(--size));
+  height: calc(180px * var(--size));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* ── Floor ambient cast ── */
+.candle-ambient {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 80px;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(255, 165, 40, var(--glow-op)) 0%,
+    rgba(255, 100, 10, calc(var(--glow-op) * 0.4)) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: candleAmbient calc(var(--speed) * 1.3) ease-in-out infinite alternate;
+}
+
+/* ── Assembly wrapper ── */
+.candle-assembly {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Wax body ── */
+.candle-body {
+  position: relative;
+  width: calc(22px * var(--size));
+  height: calc(130px * var(--size));
+  background: linear-gradient(
+    90deg,
+    #d8cdb0 0%,
+    #f0e8d0 18%,
+    #faf5e4 40%,
+    #f5eedd 65%,
+    #e2d8c0 85%,
+    #c8bc9a 100%
+  );
+  border-radius: 2px 2px 1px 1px;
+  box-shadow:
+    inset -4px 0 8px rgba(0, 0, 0, 0.14),
+    inset  3px 0 5px rgba(255, 255, 255, 0.25),
+    2px 3px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Warm light cast from flame onto top of wax */
+.candle-body::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 180, 60, 0.22) 0%,
+    transparent 100%
+  );
+  border-radius: inherit;
+  pointer-events: none;
+  animation: candleBodyGlow var(--speed) ease-in-out infinite alternate;
+}
+
+/* ── Wax drips ── */
+.candle-drip {
+  position: absolute;
+  background: linear-gradient(180deg, rgba(245, 235, 210, 0.95) 0%, rgba(240, 225, 195, 0) 100%);
+  border-radius: 0 0 4px 4px;
+}
+
+.drip-1 {
+  right: -3px; top: 10%;
+  width: calc(5px * var(--size));
+  height: calc(22px * var(--size));
+}
+.drip-2 {
+  left: -2px; top: 22%;
+  width: calc(4px * var(--size));
+  height: calc(14px * var(--size));
+}
+.drip-3 {
+  right: 3px; top: 38%;
+  width: calc(3px * var(--size));
+  height: calc(10px * var(--size));
+}
+
+/* ── Melt pool ── */
+.candle-melt-pool {
+  position: absolute;
+  top: -3px;
+  left: -5px; right: -5px;
+  height: calc(9px * var(--size));
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(248, 238, 215, 0.95) 0%,
+    rgba(238, 225, 195, 0.85) 60%,
+    rgba(220, 205, 170, 0.6) 100%
+  );
+  border-radius: 50%;
+  animation: meltPoolPulse var(--speed) ease-in-out infinite alternate;
+}
+
+/* ── Flame area ── */
+.candle-flame-area {
+  position: absolute;
+  top: calc(-65px * var(--size));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(30px * var(--size));
+  height: calc(65px * var(--size));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* ── Wick ── */
+.candle-wick {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(2px * var(--size));
+  height: calc(8px * var(--size));
+  background: linear-gradient(180deg, #1a0e00 0%, #0a0600 100%);
+  border-radius: 1px;
+  z-index: 3;
+}
+
+/* ── Flame container ── */
+.candle-flame {
+  position: absolute;
+  bottom: calc(6px * var(--size));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(20px * var(--size));
+  height: calc(55px * var(--size));
+}
+
+/* Outer orange halo */
+.cf-outer {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: calc(18px * var(--size));
+  height: calc(48px * var(--size));
+  background: radial-gradient(
+    ellipse 60% 100% at 50% 100%,
+    rgba(255,  90,  0, 0.55) 0%,
+    rgba(255, 130,  0, 0.40) 30%,
+    rgba(255,  60,  0, 0.20) 60%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 25% 25% / 60% 60% 25% 25%;
+  filter: blur(3px);
+}
+
+/* Main yellow flame */
+.cf-main {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: calc(12px * var(--size));
+  height: calc(40px * var(--size));
+  background: radial-gradient(
+    ellipse 70% 100% at 50% 100%,
+    #fff6b0 0%,
+    #ffcc00 22%,
+    #ff8800 52%,
+    rgba(255, 55, 0, 0.7) 80%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 20% 20% / 60% 60% 20% 20%;
+  mix-blend-mode: screen;
+}
+
+/* Bright inner core */
+.cf-core {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: calc(6px * var(--size));
+  height: calc(26px * var(--size));
+  background: radial-gradient(
+    ellipse 80% 100% at 50% 100%,
+    rgba(255, 255, 230, 0.95) 0%,
+    rgba(255, 240, 160, 0.75) 40%,
+    rgba(255, 180,  60, 0.30) 75%,
+    transparent 100%
+  );
+  border-radius: 50% 50% 20% 20% / 60% 60% 20% 20%;
+  mix-blend-mode: screen;
+  filter: blur(0.5px);
+}
+
+/* White tip */
+.cf-tip {
+  position: absolute;
+  bottom: calc(22px * var(--size)); left: 50%;
+  transform: translateX(-50%);
+  width: calc(3px * var(--size));
+  height: calc(6px * var(--size));
+  background: rgba(255, 255, 250, 0.9);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+/* ── Smoke ── */
+.candle-smoke {
+  position: absolute;
+  bottom: calc(58px * var(--size));
+  left: 50%;
+  width: calc(6px * var(--size));
+  height: calc(24px * var(--size));
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(140, 130, 120, 0.14) 50%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.smoke-1 {
+  transform: translateX(calc(-50% - 1px));
+  animation: candleSmoke1 3.5s ease-in-out infinite;
+}
+.smoke-2 {
+  transform: translateX(calc(-50% + 2px));
+  animation: candleSmoke2 3.5s ease-in-out 1.2s infinite;
+}
+
+/* ── Holder plate ── */
+.candle-plate {
+  width: calc(52px * var(--size));
+  height: calc(11px * var(--size));
+  background: linear-gradient(
+    180deg,
+    #c8b892 0%,
+    #a89872 45%,
+    #887855 100%
+  );
+  border-radius: 50%;
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* ═══ FAST / SLOW FLICKER VARIANTS ═══ */
+.candle-flicker-fast .cf-outer,
+.candle-flicker-fast .cf-main {
+  animation: candleFlickerFast var(--speed) ease-in-out infinite alternate;
+}
+.candle-flicker-slow .cf-outer,
+.candle-flicker-slow .cf-main {
+  animation: candleFlickerSlow calc(var(--speed) * 1.4) ease-in-out infinite alternate;
+}
+.candle-flame .cf-core {
+  animation: candleCoreFlicker calc(var(--speed) * 0.7) ease-in-out infinite alternate;
+}
+
+/* ═══ KEYFRAMES ═══ */
+@keyframes candleFlickerFast {
+  0%   { transform: translateX(-50%) scaleX(1.00) scaleY(1.00) rotate(-2deg); opacity: 0.90; }
+  28%  { transform: translateX(-50%) scaleX(0.85) scaleY(1.09) rotate( 3deg); opacity: 1.00; }
+  55%  { transform: translateX(-50%) scaleX(1.08) scaleY(0.93) rotate(-1deg); opacity: 0.88; }
+  78%  { transform: translateX(-50%) scaleX(0.92) scaleY(1.06) rotate( 2deg); opacity: 0.95; }
+  100% { transform: translateX(-50%) scaleX(1.04) scaleY(0.97) rotate(-3deg); opacity: 0.85; }
+}
+
+@keyframes candleFlickerSlow {
+  0%   { transform: translateX(-50%) scaleX(1.00) scaleY(1.00) rotate(-1deg); opacity: 0.90; }
+  50%  { transform: translateX(-50%) scaleX(0.90) scaleY(1.06) rotate( 2deg); opacity: 0.95; }
+  100% { transform: translateX(-50%) scaleX(1.06) scaleY(0.96) rotate(-2deg); opacity: 0.88; }
+}
+
+@keyframes candleCoreFlicker {
+  from { opacity: 0.85; transform: translateX(-50%) scaleY(1.00); }
+  to   { opacity: 1.00; transform: translateX(-50%) scaleY(1.08); }
+}
+
+@keyframes candleAmbient {
+  from { opacity: 0.70; transform: translateX(-50%) scale(0.94); }
+  to   { opacity: 1.00; transform: translateX(-50%) scale(1.06); }
+}
+
+@keyframes candleBodyGlow {
+  from { opacity: 0.70; }
+  to   { opacity: 1.00; }
+}
+
+@keyframes meltPoolPulse {
+  from { transform: scaleX(0.96); opacity: 0.85; }
+  to   { transform: scaleX(1.04); opacity: 1.00; }
+}
+
+@keyframes candleSmoke1 {
+  0%   { opacity: 0; transform: translateX(calc(-50% - 1px)) translateY(0)     scaleX(0.5); }
+  15%  { opacity: 0.7; }
+  70%  { opacity: 0.2; transform: translateX(calc(-46% - 1px)) translateY(-22px) scaleX(1.4); }
+  100% { opacity: 0; transform: translateX(calc(-52% - 1px)) translateY(-38px) scaleX(2.2); }
+}
+
+@keyframes candleSmoke2 {
+  0%   { opacity: 0; transform: translateX(calc(-50% + 2px)) translateY(0)     scaleX(0.5); }
+  15%  { opacity: 0.6; }
+  70%  { opacity: 0.15; transform: translateX(calc(-54% + 2px)) translateY(-20px) scaleX(1.6); }
+  100% { opacity: 0; transform: translateX(calc(-48% + 2px)) translateY(-36px) scaleX(2.4); }
+}

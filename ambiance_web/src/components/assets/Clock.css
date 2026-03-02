@@ -1,0 +1,154 @@
+/* ═══════════════════════════════════════════════════
+   CLOCK — Analog wall clock with real time
+   ═══════════════════════════════════════════════════ */
+
+.clock-wrap {
+  position: relative;
+  width:  calc(120px * var(--size));
+  height: calc(120px * var(--size));
+}
+
+/* ── Outer wooden frame ── */
+.clock-frame {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 32% 28%,
+    #7a5225 0%,
+    #5e3d1c 35%,
+    #4a2e12 70%,
+    #3a2008 100%
+  );
+  box-shadow:
+    0 0 0 calc(3px * var(--size)) #8a6230,
+    0 8px 24px rgba(0, 0, 0, 0.55),
+    0 2px  6px rgba(0, 0, 0, 0.35),
+    inset 0 2px 5px rgba(255, 200, 140, 0.12);
+}
+
+/* ── Clock face ── */
+.clock-face {
+  position: absolute;
+  inset: calc(7px * var(--size));
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 34%,
+    #fdfaf2 0%,
+    #f8f3e4 45%,
+    #f0e8d4 78%,
+    #e4dcca 100%
+  );
+  box-shadow:
+    inset 0 3px 10px rgba(0, 0, 0, 0.12),
+    inset 0 -2px  6px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Hour markers ── */
+.clock-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: left center;
+  transform: rotate(var(--deg)) translateX(calc(42px * var(--size))) translateY(-50%);
+  border-radius: 1px;
+}
+
+.clock-mark.major {
+  width:  calc(8px  * var(--size));
+  height: calc(3px  * var(--size));
+  background: #2a1e0e;
+  margin-left: calc(-8px * var(--size));
+}
+
+.clock-mark.minor {
+  width:  calc(5px  * var(--size));
+  height: calc(1.5px * var(--size));
+  background: #6a5038;
+  margin-left: calc(-5px * var(--size));
+}
+
+/* ── Roman numerals ── */
+.clock-numeral {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: left center;
+  transform: rotate(var(--deg)) translateX(calc(33px * var(--size))) translateY(-50%);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size:  calc(7px * var(--size));
+  font-weight: 700;
+  color: #2a1e0e;
+  letter-spacing: -0.02em;
+  /* Counter-rotate text so it stays upright */
+  margin-left: calc(-6px * var(--size));
+}
+
+.clock-numeral span {
+  display: block;
+  transform: rotate(calc(-1 * var(--deg)));
+}
+
+/* ── Hands ── */
+.clock-hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  border-radius: 2px 2px 1px 1px;
+}
+
+.hour-hand {
+  width:  calc(4px  * var(--size));
+  height: calc(28px * var(--size));
+  margin-left: calc(-2px * var(--size));
+  background: linear-gradient(0deg, #3a2810 0%, #221608 100%);
+  border-radius: 2px 2px 1px 1px;
+}
+
+.min-hand {
+  width:  calc(3px  * var(--size));
+  height: calc(38px * var(--size));
+  margin-left: calc(-1.5px * var(--size));
+  background: linear-gradient(0deg, #3a2810 0%, #2a1a0c 100%);
+  border-radius: 2px 2px 1px 1px;
+}
+
+.sec-hand {
+  width:  calc(1.5px * var(--size));
+  height: calc(44px * var(--size));
+  margin-left: calc(-0.75px * var(--size));
+  background: linear-gradient(0deg, #cc1800 0%, #dd2200 100%);
+  border-radius: 1px;
+}
+
+/* Tail of second hand */
+.sec-hand::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(2px * var(--size));
+  height: calc(10px * var(--size));
+  background: #cc1800;
+  border-radius: 0 0 1px 1px;
+}
+
+/* ── Center cap ── */
+.clock-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width:  calc(9px * var(--size));
+  height: calc(9px * var(--size));
+  background: radial-gradient(circle at 38% 34%, #6a4820 0%, #3a1808 100%);
+  border-radius: 50%;
+  box-shadow:
+    0 1px 5px rgba(0, 0, 0, 0.45),
+    inset 0 1px 2px rgba(255, 200, 140, 0.20);
+  z-index: 10;
+}

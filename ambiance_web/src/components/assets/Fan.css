@@ -1,0 +1,181 @@
+/* ═══════════════════════════════════════════════════
+   FAN — Electric desk fan with spinning blades
+   ═══════════════════════════════════════════════════ */
+
+.fan-wrap {
+  position: relative;
+  width:  calc(120px * var(--size));
+  height: calc(190px * var(--size));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Circular housing ── */
+.fan-housing {
+  position: relative;
+  width:  calc(110px * var(--size));
+  height: calc(110px * var(--size));
+  border-radius: 50%;
+  background: linear-gradient(
+    140deg,
+    #d8d4cc 0%,
+    #c4c0b8 40%,
+    #b0aca4 70%,
+    #9c9890 100%
+  );
+  border: calc(4px * var(--size)) solid #aaaa9e;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.40),
+    inset 0 3px 6px rgba(255, 255, 255, 0.28),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.16);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ── Grill ── */
+.fan-grill {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.grill-line {
+  position: absolute;
+  background: rgba(60, 58, 55, 0.22);
+}
+
+.grill-h {
+  left: 4%; right: 4%;
+  height: 1.5px;
+}
+
+.grill-v {
+  top: 4%; bottom: 4%;
+  width: 1.5px;
+}
+
+/* Outer grill ring */
+.grill-ring {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 2px solid rgba(60, 58, 55, 0.18);
+}
+
+/* ── Rotor ── */
+.fan-rotor {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: fanSpin var(--rot-dur) linear infinite;
+}
+
+/* ── Blades ── */
+.fan-blade {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 46%;
+  height: 28%;
+  transform-origin: 0% 50%;
+  background: linear-gradient(
+    180deg,
+    rgba(110, 130, 190, 0.70) 0%,
+    rgba( 85, 105, 165, 0.60) 50%,
+    rgba( 65,  85, 145, 0.48) 100%
+  );
+  border-radius: 35% 60% 60% 20% / 20% 55% 45% 20%;
+  filter: blur(var(--blur));
+  box-shadow: 0 0 10px rgba(100, 120, 200, 0.18);
+  margin-top: -14%;
+}
+
+.b1 { transform: rotate(  0deg) translateY(-50%); }
+.b2 { transform: rotate(120deg) translateY(-50%); }
+.b3 { transform: rotate(240deg) translateY(-50%); }
+
+/* ── Center hub ── */
+.fan-hub {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width:  calc(16px * var(--size));
+  height: calc(16px * var(--size));
+  background: radial-gradient(
+    circle at 38% 34%,
+    #d8c8a8 0%,
+    #a89878 45%,
+    #706048 100%
+  );
+  border-radius: 50%;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.45),
+    inset 0 1px 2px rgba(255, 255, 255, 0.25);
+  z-index: 2;
+}
+
+/* ── Air shimmer ── */
+.fan-air-shimmer {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(200, 220, 255, 0.04) 0%,
+    transparent 70%
+  );
+  animation: fanAirShimmer calc(var(--rot-dur) * 3) ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* ── Neck ── */
+.fan-neck {
+  width: calc(11px * var(--size));
+  height: calc(44px * var(--size));
+  background: linear-gradient(
+    90deg,
+    #9c9890 0%,
+    #c4c0b8 40%,
+    #b8b4ac 100%
+  );
+  border-radius: 4px;
+  box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.28);
+}
+
+/* ── Base ── */
+.fan-base {
+  width:  calc(72px * var(--size));
+  height: calc(18px * var(--size));
+  background: linear-gradient(
+    180deg,
+    #c4c0b8 0%,
+    #acaaa4 55%,
+    #94928c 100%
+  );
+  border-radius: 5px;
+  box-shadow:
+    0 5px 12px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fan-base-detail {
+  width: 45%;
+  height: 4px;
+  background: rgba(80, 78, 74, 0.25);
+  border-radius: 2px;
+}
+
+/* ═══ KEYFRAMES ═══ */
+@keyframes fanSpin {
+  from { transform: rotate(  0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes fanAirShimmer {
+  from { opacity: 0.4; transform: scale(0.96) rotate(-5deg); }
+  to   { opacity: 0.9; transform: scale(1.02) rotate( 5deg); }
+}

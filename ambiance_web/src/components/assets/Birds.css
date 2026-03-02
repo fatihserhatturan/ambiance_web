@@ -1,0 +1,74 @@
+/* ═══════════════════════════════════════════════════
+   BIRDS — Silhouette birds with realistic wing flap
+   ═══════════════════════════════════════════════════ */
+
+.birds-wrap {
+  position: relative;
+  width:  calc(220px * var(--size));
+  height: calc(130px * var(--size));
+  pointer-events: none;
+}
+
+/* ── Individual bird ── */
+.bird {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  transform: scale(var(--bird-scale));
+  transform-origin: center center;
+  animation: birdDrift ease-in-out infinite alternate;
+}
+
+/* ── Wings ── */
+.bird-wing {
+  width:  18px;
+  height:  8px;
+  background: rgba(15, 12, 8, 0.88);
+  border-radius: 50%;
+}
+
+/* Left wing flaps upward */
+.bird-wing-l {
+  border-radius: 50% 50% 60% 20% / 80% 80% 20% 20%;
+  transform-origin: right 80%;
+  animation: wingFlapL ease-in-out infinite alternate;
+}
+
+/* Right wing mirrors */
+.bird-wing-r {
+  border-radius: 50% 50% 20% 60% / 80% 80% 20% 20%;
+  transform-origin: left 80%;
+  animation: wingFlapR ease-in-out infinite alternate;
+}
+
+/* ── Body center ── */
+.bird-body-dot {
+  width: 5px;
+  height: 5px;
+  background: rgba(15, 12, 8, 0.90);
+  border-radius: 50% 50% 40% 40%;
+  flex-shrink: 0;
+}
+
+/* ═══ KEYFRAMES ═══ */
+@keyframes wingFlapL {
+  0%   { transform: rotate(-22deg) scaleY(0.55); }
+  50%  { transform: rotate(  2deg) scaleY(1.00); }
+  100% { transform: rotate( 16deg) scaleY(0.75); }
+}
+
+@keyframes wingFlapR {
+  0%   { transform: rotate( 22deg) scaleY(0.55); }
+  50%  { transform: rotate( -2deg) scaleY(1.00); }
+  100% { transform: rotate(-16deg) scaleY(0.75); }
+}
+
+/* Slow, gentle flight path drift */
+@keyframes birdDrift {
+  0%   { transform: scale(var(--bird-scale)) translate(  0px,  0px); }
+  25%  { transform: scale(var(--bird-scale)) translate( 22px, -9px); }
+  50%  { transform: scale(var(--bird-scale)) translate( 48px,  4px); }
+  75%  { transform: scale(var(--bird-scale)) translate( 28px, -6px); }
+  100% { transform: scale(var(--bird-scale)) translate(  0px,  2px); }
+}
