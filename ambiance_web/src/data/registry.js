@@ -107,7 +107,6 @@ export const BACKGROUNDS = [
 ]
 
 // ─── UI Grouping Metadata ──────────────────────────────────────────────────
-// Background grupları — BACKGROUNDS[].group alanıyla eşleşir
 export const BG_GROUPS = [
   { key: 'nature',    label: 'Doğa & Gece' },
   { key: 'weather',   label: 'Hava & Mevsim' },
@@ -115,16 +114,16 @@ export const BG_GROUPS = [
   { key: 'indoor',    label: 'İç Mekan' },
 ]
 
-// Asset kategorileri — SCENE_ASSETS[].category alanıyla eşleşir
+// Asset kategorileri — icon: Lucide icon name
 export const ASSET_GROUPS = [
-  { key: 'warmth',   label: 'Sıcaklık', icon: '🔥' },
-  { key: 'weather',  label: 'Hava',     icon: '🌧️' },
-  { key: 'nature',   label: 'Doğa',     icon: '🌿' },
-  { key: 'ambiance', label: 'Ortam',    icon: '🎶' },
+  { key: 'warmth',   label: 'Sıcaklık', icon: 'Flame' },
+  { key: 'weather',  label: 'Hava',     icon: 'CloudRain' },
+  { key: 'nature',   label: 'Doğa',     icon: 'Leaf' },
+  { key: 'ambiance', label: 'Ortam',    icon: 'Radio' },
 ]
 
 // ─── Scene Assets ─────────────────────────────────────────────────────────
-// Sahneye eklenebilir nesneler; bazılarının ses katmanı vardır.
+// icon: Lucide icon name string
 
 export const SCENE_ASSETS = [
 
@@ -134,7 +133,7 @@ export const SCENE_ASSETS = [
     id: 'fireplace',
     label: 'Şömine',
     description: 'Taş şömine, odun çatırtısı',
-    icon: '🔥',
+    icon: 'Flame',
     category: 'warmth',
     categoryLabel: 'Sıcaklık',
     defaultSettings: { intensity: 0.8, size: 1.0, sound: true },
@@ -145,7 +144,7 @@ export const SCENE_ASSETS = [
     id: 'candle',
     label: 'Mum',
     description: 'Titrek balmumu mum',
-    icon: '🕯️',
+    icon: 'Flame',
     category: 'warmth',
     categoryLabel: 'Sıcaklık',
     defaultSettings: { intensity: 0.7, size: 0.8, sound: false },
@@ -158,7 +157,7 @@ export const SCENE_ASSETS = [
     id: 'rain-window',
     label: 'Yağmur / Cam',
     description: 'Pencereden süzülen yağmur damlacıkları',
-    icon: '🌧️',
+    icon: 'CloudDrizzle',
     category: 'weather',
     categoryLabel: 'Hava',
     defaultSettings: { intensity: 0.6, size: 1.0, sound: true },
@@ -169,7 +168,7 @@ export const SCENE_ASSETS = [
     id: 'thunder',
     label: 'Gök Gürültüsü',
     description: 'Düşük, yuvarlanarak gelen gürültü',
-    icon: '⛈️',
+    icon: 'Zap',
     category: 'weather',
     categoryLabel: 'Hava',
     defaultSettings: { intensity: 0.5, size: 1.0, sound: true },
@@ -183,7 +182,7 @@ export const SCENE_ASSETS = [
     id: 'stream',
     label: 'Dere',
     description: 'Akan dağ deresi, çakıl taşları',
-    icon: '🏞️',
+    icon: 'Waves',
     category: 'nature',
     categoryLabel: 'Doğa',
     defaultSettings: { intensity: 0.65, size: 1.0, sound: true },
@@ -194,7 +193,7 @@ export const SCENE_ASSETS = [
     id: 'birds',
     label: 'Kuş Sesleri',
     description: 'Orman kuşları, sabah korosu',
-    icon: '🐦',
+    icon: 'Bird',
     category: 'nature',
     categoryLabel: 'Doğa',
     defaultSettings: { intensity: 0.55, size: 1.0, sound: true },
@@ -205,7 +204,7 @@ export const SCENE_ASSETS = [
     id: 'wind-chimes',
     label: 'Rüzgar Çanı',
     description: 'Kristal rüzgar çanları, yumuşak tınılar',
-    icon: '🎐',
+    icon: 'Music2',
     category: 'nature',
     categoryLabel: 'Doğa',
     defaultSettings: { intensity: 0.5, size: 0.9, sound: true },
@@ -219,7 +218,7 @@ export const SCENE_ASSETS = [
     id: 'fan',
     label: 'Vantilatör',
     description: 'Elektrik vantilatör, sakin uğultu',
-    icon: '🌀',
+    icon: 'Wind',
     category: 'ambiance',
     categoryLabel: 'Ortam',
     defaultSettings: { intensity: 0.6, size: 1.0, sound: true },
@@ -230,7 +229,7 @@ export const SCENE_ASSETS = [
     id: 'clock',
     label: 'Duvar Saati',
     description: 'Ritimli tik-tak, mekanik ses',
-    icon: '🕰️',
+    icon: 'Clock',
     category: 'ambiance',
     categoryLabel: 'Ortam',
     defaultSettings: { intensity: 0.7, size: 1.0, sound: true },
@@ -240,26 +239,27 @@ export const SCENE_ASSETS = [
 ]
 
 // ─── Audio Tracks reference list ──────────────────────────────────────────
+// icon: Lucide icon name string
 
 export const AUDIO_TRACKS = [
   // Ambient backgrounds
-  { id: 'forest-night',   label: 'Orman Gecesi',       icon: '🌲' },
-  { id: 'deep-forest',    label: 'Derin Orman',         icon: '🌳' },
-  { id: 'japanese-garden',label: 'Japon Bahçesi',       icon: '🎋' },
-  { id: 'winter-wind',    label: 'Kış Rüzgarı',         icon: '❄️' },
-  { id: 'rain-city',      label: 'Yağmurlu Şehir',      icon: '🌆' },
-  { id: 'autumn-wind',    label: 'Sonbahar Esintisi',   icon: '🍂' },
-  { id: 'thunderstorm',   label: 'Gök Gürültüsü',       icon: '⛈️' },
-  { id: 'ocean-coast',    label: 'Okyanus Kıyısı',      icon: '🌊' },
-  { id: 'mountain-peak',  label: 'Dağ Zirvesi',         icon: '⛰️' },
-  { id: 'coffee-shop',    label: 'Kafe',                icon: '☕' },
+  { id: 'forest-night',      label: 'Orman Gecesi',      icon: 'TreePine' },
+  { id: 'deep-forest',       label: 'Derin Orman',        icon: 'TreePine' },
+  { id: 'japanese-garden',   label: 'Japon Bahçesi',      icon: 'Leaf' },
+  { id: 'winter-wind',       label: 'Kış Rüzgarı',        icon: 'Snowflake' },
+  { id: 'rain-city',         label: 'Yağmurlu Şehir',     icon: 'CloudRain' },
+  { id: 'autumn-wind',       label: 'Sonbahar Esintisi',  icon: 'Leaf' },
+  { id: 'thunderstorm',      label: 'Gök Gürültüsü',      icon: 'Zap' },
+  { id: 'ocean-coast',       label: 'Okyanus Kıyısı',     icon: 'Waves' },
+  { id: 'mountain-peak',     label: 'Dağ Zirvesi',        icon: 'Mountain' },
+  { id: 'coffee-shop',       label: 'Kafe',               icon: 'Coffee' },
   // Asset sounds
-  { id: 'fireplace-crackle', label: 'Şömine Çatırtısı', icon: '🔥' },
-  { id: 'rain-window',    label: 'Cam Yağmuru',          icon: '💧' },
-  { id: 'thunder-rumble', label: 'Gök Gürültüsü',        icon: '⛈️' },
-  { id: 'stream-water',   label: 'Dere Suyu',            icon: '🏞️' },
-  { id: 'wind-chimes',    label: 'Rüzgar Çanı',          icon: '🎐' },
-  { id: 'forest-birds',   label: 'Orman Kuşları',        icon: '🐦' },
-  { id: 'desk-fan',       label: 'Vantilatör',           icon: '🌀' },
-  { id: 'clock-ticking',  label: 'Duvar Saati',          icon: '🕰️' },
+  { id: 'fireplace-crackle', label: 'Şömine Çatırtısı',  icon: 'Flame' },
+  { id: 'rain-window',       label: 'Cam Yağmuru',        icon: 'CloudDrizzle' },
+  { id: 'thunder-rumble',    label: 'Gök Gürültüsü',      icon: 'Zap' },
+  { id: 'stream-water',      label: 'Dere Suyu',          icon: 'Waves' },
+  { id: 'wind-chimes',       label: 'Rüzgar Çanı',        icon: 'Music2' },
+  { id: 'forest-birds',      label: 'Orman Kuşları',      icon: 'Bird' },
+  { id: 'desk-fan',          label: 'Vantilatör',         icon: 'Wind' },
+  { id: 'clock-ticking',     label: 'Duvar Saati',        icon: 'Clock' },
 ]

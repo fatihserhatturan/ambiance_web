@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Save, Check, X } from 'lucide-react'
 import { useSceneStore } from '../../../store/sceneStore'
 import { BACKGROUNDS, SCENE_ASSETS } from '../../../data/registry'
 
@@ -49,7 +50,7 @@ export default function PresetsPanel() {
         </span>
         {sceneAssets.length > 0 && (
           <span className="preset-current-assets">
-            {sceneAssets.map((a) => a.icon).join(' ')} {sceneAssets.length} nesne
+            {sceneAssets.length} nesne aktif
           </span>
         )}
       </div>
@@ -70,7 +71,10 @@ export default function PresetsPanel() {
           disabled={!presetName.trim()}
           title="Mevcut ambiyansı kaydet"
         >
-          {savedFeedback ? '✓' : '💾'}
+          {savedFeedback
+            ? <Check size={14} strokeWidth={2} />
+            : <Save  size={14} strokeWidth={1.5} />
+          }
         </button>
       </div>
 
@@ -100,7 +104,7 @@ export default function PresetsPanel() {
                 onClick={() => deletePreset(preset.id)}
                 title="Sil"
               >
-                ✕
+                <X size={12} strokeWidth={2} />
               </button>
             </div>
           ))}

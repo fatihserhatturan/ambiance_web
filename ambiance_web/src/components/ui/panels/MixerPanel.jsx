@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
+import { AudioLines, Volume2, VolumeX } from 'lucide-react'
 import { useSceneStore } from '../../../store/sceneStore'
 import { BACKGROUNDS, AUDIO_TRACKS } from '../../../data/registry'
 import { audioEngine } from '../../../audio/AudioEngine'
+import Icon from '../Icon'
 
 const SOUND_ICON = Object.fromEntries(AUDIO_TRACKS.map((t) => [t.id, t.icon]))
 
-// ─── VU Bars ─────────────────────────────────────────────────────────────
-// Polls AudioEngine's analyser every 150ms and drives CSS animations.
+// ─── VU Bars ──────────────────────────────────────────────────────────────
 function VUBars({ soundId, bars = 6 }) {
   const [active, setActive] = useState(false)
   const intervalRef = useRef(null)
@@ -31,7 +32,7 @@ function VUBars({ soundId, bars = 6 }) {
 }
 
 // ─── Channel Strip ────────────────────────────────────────────────────────
-function ChannelStrip({ soundId, label, icon, badge, badgeType, isMaster = false }) {
+function ChannelStrip({ soundId, label, iconName, badge, badgeType, isMaster = false }) {
   const channelVolumes   = useSceneStore((s) => s.channelVolumes)
   const audioVolume      = useSceneStore((s) => s.audioVolume)
   const audioMuted       = useSceneStore((s) => s.audioMuted)
@@ -43,10 +44,7 @@ function ChannelStrip({ soundId, label, icon, badge, badgeType, isMaster = false
   const prevVolRef = useRef(1)
 
   const handleChannelMute = () => {
-    if (isMaster) {
-      toggleMute()
-      return
-    }
+    if (isMaster) { toggleMute(); return }
     if (channelMuted) {
       setChannelVolume(soundId, prevVolRef.current)
       setChannelMuted(false)
@@ -72,7 +70,9 @@ function ChannelStrip({ soundId, label, icon, badge, badgeType, isMaster = false
   return (
     <div className={`mixer-channel ${isMaster ? 'mixer-master' : ''} ${isMuted ? 'muted' : ''}`}>
       <div className="mixer-channel-header">
-        <span className="mixer-channel-icon">{icon}</span>
+        <span className="mixer-channel-icon">
+          <Icon name={iconName} size={14} />
+        </span>
         <span className="mixer-channel-name">{label}</span>
         {badge && (
           <span className={`mixer-channel-badge badge-${badgeType}`}>{badge}</span>
@@ -85,7 +85,10 @@ function ChannelStrip({ soundId, label, icon, badge, badgeType, isMaster = false
           onClick={handleChannelMute}
           title={isMuted ? 'Sesi aç' : 'Sesi kapat'}
         >
-          {isMuted ? '🔇' : '🔊'}
+          {isMuted
+            ? <VolumeX size={13} strokeWidth={1.5} />
+            : <Volume2 size={13} strokeWidth={1.5} />
+          }
         </button>
 
         <VUBars soundId={isMaster ? '__master__' : soundId} />
@@ -110,8 +113,8 @@ export default function MixerPanel() {
   const activeBackground = useSceneStore((s) => s.activeBackground)
   const sceneAssets      = useSceneStore((s) => s.sceneAssets)
 
-  const activeBg = BACKGROUNDS.find((b) => b.id === activeBackground)
-  const bgIcon   = activeBg ? (SOUND_ICON[activeBg.ambientSound] || '🌿') : '🌿'
+  const activeBg   = BACKGROUNDS.find((b) => b.id === activeBackground)
+  const bgIconName = activeBg ? (SOUND_ICON[activeBg.ambientSound] ?? 'Leaf') : 'Leaf'
 
   const activeAssets = sceneAssets.filter(
     (a) => a.hasSound && a.settings?.sound !== false
@@ -123,7 +126,7 @@ export default function MixerPanel() {
       <ChannelStrip
         soundId="__master__"
         label="Master"
-        icon="🎛️"
+        iconName="AudioLines"
         isMaster
       />
 
@@ -133,7 +136,7 @@ export default function MixerPanel() {
         <ChannelStrip
           soundId={activeBg.ambientSound}
           label={activeBg.label}
-          icon={bgIcon}
+          iconName={bgIconName}
           badge="zemin"
           badgeType="background"
         />
@@ -144,7 +147,7 @@ export default function MixerPanel() {
           key={asset.instanceId}
           soundId={asset.soundId}
           label={asset.label}
-          icon={asset.icon}
+          iconName={asset.icon}
           badge="nesne"
           badgeType="asset"
         />

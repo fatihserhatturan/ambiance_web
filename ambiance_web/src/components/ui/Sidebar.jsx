@@ -1,3 +1,4 @@
+import { ChevronLeft, ChevronRight, LayoutGrid, Layers, SlidersHorizontal, Bookmark } from 'lucide-react'
 import { useSceneStore } from '../../store/sceneStore'
 import BackgroundsPanel from './panels/BackgroundsPanel'
 import AssetsPanel      from './panels/AssetsPanel'
@@ -6,10 +7,10 @@ import PresetsPanel     from './panels/PresetsPanel'
 import './Sidebar.css'
 
 const TABS = [
-  { id: 'backgrounds', label: 'Sahneler',  icon: '🪟' },
-  { id: 'assets',      label: 'Nesneler',  icon: '✨' },
-  { id: 'mixer',       label: 'Mikser',    icon: '🎚️' },
-  { id: 'presets',     label: 'Presetler', icon: '🎛️' },
+  { id: 'backgrounds', label: 'Sahneler',  Icon: LayoutGrid },
+  { id: 'assets',      label: 'Nesneler',  Icon: Layers },
+  { id: 'mixer',       label: 'Mikser',    Icon: SlidersHorizontal },
+  { id: 'presets',     label: 'Presetler', Icon: Bookmark },
 ]
 
 const PANELS = {
@@ -26,6 +27,7 @@ export default function Sidebar() {
   const setActivePanelTab = useSceneStore((s) => s.setActivePanelTab)
 
   const ActivePanel = PANELS[activePanelTab]
+  const ToggleIcon  = sidebarOpen ? ChevronRight : ChevronLeft
 
   return (
     <>
@@ -34,7 +36,7 @@ export default function Sidebar() {
         onClick={() => setSidebarOpen(!sidebarOpen)}
         title={sidebarOpen ? 'Kapat' : 'Aç'}
       >
-        {sidebarOpen ? '›' : '‹'}
+        <ToggleIcon size={13} strokeWidth={2} />
       </button>
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
@@ -44,14 +46,16 @@ export default function Sidebar() {
         </div>
 
         <nav className="sidebar-tabs">
-          {TABS.map((tab) => (
+          {TABS.map(({ id, label, Icon }) => (
             <button
-              key={tab.id}
-              className={`sidebar-tab ${activePanelTab === tab.id ? 'active' : ''}`}
-              onClick={() => setActivePanelTab(tab.id)}
+              key={id}
+              className={`sidebar-tab ${activePanelTab === id ? 'active' : ''}`}
+              onClick={() => setActivePanelTab(id)}
             >
-              <span className="tab-icon">{tab.icon}</span>
-              <span className="tab-label">{tab.label}</span>
+              <span className="tab-icon">
+                <Icon size={15} strokeWidth={1.5} />
+              </span>
+              <span className="tab-label">{label}</span>
             </button>
           ))}
         </nav>

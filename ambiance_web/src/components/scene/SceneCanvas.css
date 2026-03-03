@@ -41,25 +41,23 @@
   height: 9%;
   background: linear-gradient(
     180deg,
-    #e2dbd2 0%,
-    #d6d0c7 70%,
-    #c2bbb2 100%
+    #161618 0%,
+    #1a1a1c 70%,
+    #1e1e20 100%
   );
-  /* Junction shadow toward walls */
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.60);
 }
 
-/* Ceiling left-corner ambient shadow */
 .room-ceiling::before {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
     90deg,
-    rgba(0, 0, 0, 0.10) 0%,
+    rgba(0, 0, 0, 0.18) 0%,
     transparent 22%,
     transparent 78%,
-    rgba(0, 0, 0, 0.08) 100%
+    rgba(0, 0, 0, 0.14) 100%
   );
 }
 
@@ -69,28 +67,27 @@
   top: 9%;
   left: 0;
   width: 20%;
-  height: 81%; /* 90% − 9% */
+  height: 81%;
   background: linear-gradient(
     90deg,
-    #b4aca3 0%,
-    #cdc6bb 55%,
-    #c7c0b6 100%
+    #111113 0%,
+    #1a1a1c 55%,
+    #1e1e20 100%
   );
 }
 
-/* Outer edge depth shadow */
 .room-wall-left::before {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
     90deg,
-    rgba(0, 0, 0, 0.18) 0%,
-    transparent 35%
+    rgba(0, 0, 0, 0.30) 0%,
+    transparent 40%
   );
 }
 
-/* Warm window-light bleed near glass */
+/* Subtle scene-light bleed near window */
 .room-wall-left::after {
   content: '';
   position: absolute;
@@ -99,7 +96,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 248, 225, 0.09) 100%
+    rgba(255, 255, 255, 0.025) 100%
   );
 }
 
@@ -112,9 +109,9 @@
   height: 81%;
   background: linear-gradient(
     270deg,
-    #b1a9a1 0%,
-    #cac3b8 55%,
-    #c4bdb3 100%
+    #111113 0%,
+    #191919 55%,
+    #1e1e20 100%
   );
 }
 
@@ -124,8 +121,8 @@
   inset: 0;
   background: linear-gradient(
     270deg,
-    rgba(0, 0, 0, 0.16) 0%,
-    transparent 35%
+    rgba(0, 0, 0, 0.28) 0%,
+    transparent 40%
   );
 }
 
@@ -137,7 +134,7 @@
   background: linear-gradient(
     270deg,
     transparent 0%,
-    rgba(255, 248, 225, 0.08) 100%
+    rgba(255, 255, 255, 0.020) 100%
   );
 }
 

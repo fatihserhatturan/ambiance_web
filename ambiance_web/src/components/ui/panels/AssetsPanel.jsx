@@ -1,5 +1,7 @@
+import { Plus, Minus } from 'lucide-react'
 import { useSceneStore } from '../../../store/sceneStore'
 import { SCENE_ASSETS, ASSET_GROUPS } from '../../../data/registry'
+import Icon from '../Icon'
 
 export default function AssetsPanel() {
   const sceneAssets         = useSceneStore((s) => s.sceneAssets)
@@ -29,7 +31,9 @@ export default function AssetsPanel() {
         return (
           <div key={group.key} className="asset-group">
             <span className="asset-group-label">
-              <span className="asset-group-icon">{group.icon}</span>
+              <span className="asset-group-icon">
+                <Icon name={group.icon} size={12} />
+              </span>
               {group.label}
             </span>
 
@@ -43,7 +47,9 @@ export default function AssetsPanel() {
                     className={`asset-card ${active ? 'active' : ''}`}
                   >
                     <div className="asset-card-header">
-                      <span className="asset-icon">{assetDef.icon}</span>
+                      <span className="asset-icon">
+                        <Icon name={assetDef.icon} size={16} />
+                      </span>
                       <div className="asset-info">
                         <span className="asset-name">{assetDef.label}</span>
                         <span className="asset-desc">{assetDef.description}</span>
@@ -52,7 +58,10 @@ export default function AssetsPanel() {
                         className={`asset-toggle ${active ? 'on' : 'off'}`}
                         onClick={() => toggleAsset(assetDef)}
                       >
-                        {active ? 'Kaldır' : 'Ekle'}
+                        {active
+                          ? <><Minus size={11} strokeWidth={2} /> Kaldır</>
+                          : <><Plus  size={11} strokeWidth={2} /> Ekle</>
+                        }
                       </button>
                     </div>
 
