@@ -1,0 +1,267 @@
+/* ═══════════════════════════════════════════════════
+   VACUUM — Upright electric vacuum cleaner
+   ═══════════════════════════════════════════════════ */
+
+.vac-wrap {
+  position: relative;
+  width:  calc(90px  * var(--size));
+  height: calc(210px * var(--size));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: vacVibrate var(--vib-dur) ease-in-out infinite alternate;
+}
+
+/* ── Handle tube ── */
+.vac-handle {
+  width:  calc(14px * var(--size));
+  height: calc(80px * var(--size));
+  background: linear-gradient(
+    90deg,
+    #888890 0%,
+    #b0b0bc 35%,
+    #a0a0ac 65%,
+    #7a7a86 100%
+  );
+  border-radius: calc(6px * var(--size)) calc(6px * var(--size)) 0 0;
+  box-shadow:
+    1px 0 4px rgba(0,0,0,0.30),
+    inset 1px 0 2px rgba(255,255,255,0.18);
+  flex-shrink: 0;
+}
+
+.vac-handle-grip {
+  position: absolute;
+  top: calc(14px * var(--size));
+  left: 50%;
+  transform: translateX(-50%);
+  width:  calc(22px * var(--size));
+  height: calc(26px * var(--size));
+  background: linear-gradient(
+    180deg,
+    #4a4e6a 0%,
+    #3a3e5a 50%,
+    #2e3250 100%
+  );
+  border-radius: calc(4px * var(--size));
+  box-shadow:
+    0 3px 8px rgba(0,0,0,0.45),
+    inset 0 1px 2px rgba(255,255,255,0.12);
+}
+
+/* ── Body ── */
+.vac-body {
+  position: relative;
+  width:  calc(72px * var(--size));
+  height: calc(88px * var(--size));
+  background: linear-gradient(
+    160deg,
+    #c0c4d8 0%,
+    #9094a8 35%,
+    #7a7e92 65%,
+    #606478 100%
+  );
+  border-radius:
+    calc(14px * var(--size))
+    calc(14px * var(--size))
+    calc(8px  * var(--size))
+    calc(8px  * var(--size));
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.45),
+    inset 0 3px 6px rgba(255,255,255,0.22),
+    inset 0 -4px 8px rgba(0,0,0,0.18);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+/* Power LED */
+.vac-led {
+  position: absolute;
+  top:  calc(10px * var(--size));
+  right: calc(10px * var(--size));
+  width:  calc(7px * var(--size));
+  height: calc(7px * var(--size));
+  border-radius: 50%;
+  background: #50ff70;
+  box-shadow:
+    0 0 calc(6px  * var(--size)) rgba(60, 255, 100, calc(var(--glow) * 3)),
+    0 0 calc(12px * var(--size)) rgba(60, 255, 100, calc(var(--glow) * 1.5));
+  animation: vacLedPulse 1.8s ease-in-out infinite alternate;
+}
+
+/* Dust window */
+.vac-window {
+  position: absolute;
+  top:  calc(22px * var(--size));
+  left: 50%;
+  transform: translateX(-50%);
+  width:  calc(42px * var(--size));
+  height: calc(36px * var(--size));
+  border-radius: calc(6px * var(--size));
+  background: rgba(20, 22, 40, 0.55);
+  border: calc(2px * var(--size)) solid rgba(150, 155, 180, 0.35);
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,0.50),
+    0 1px 3px rgba(255,255,255,0.10);
+  overflow: hidden;
+}
+
+/* Dust inside window */
+.vac-dust {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 55%;
+  background: linear-gradient(
+    0deg,
+    rgba(110, 90, 60, 0.65) 0%,
+    rgba(130, 110, 80, 0.30) 70%,
+    transparent 100%
+  );
+  animation: vacDustShift 3.2s ease-in-out infinite alternate;
+}
+
+/* Brand stripe */
+.vac-stripe {
+  position: absolute;
+  bottom: calc(14px * var(--size));
+  left: 0; right: 0;
+  height: calc(8px * var(--size));
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(80, 130, 200, 0.55) 20%,
+    rgba(100, 160, 230, 0.70) 50%,
+    rgba(80, 130, 200, 0.55) 80%,
+    transparent 100%
+  );
+}
+
+/* ── Hose connector ── */
+.vac-connector {
+  width:  calc(20px * var(--size));
+  height: calc(12px * var(--size));
+  background: linear-gradient(
+    90deg,
+    #6a6e80 0%,
+    #888c9e 50%,
+    #7a7e90 100%
+  );
+  border-radius: 0 0 calc(4px * var(--size)) calc(4px * var(--size));
+  box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+  flex-shrink: 0;
+}
+
+/* ── Cleaning head ── */
+.vac-head {
+  position: relative;
+  width:  calc(88px * var(--size));
+  height: calc(22px * var(--size));
+  background: linear-gradient(
+    180deg,
+    #505468 0%,
+    #3c4056 55%,
+    #303448 100%
+  );
+  border-radius:
+    calc(4px * var(--size))
+    calc(4px * var(--size))
+    calc(8px * var(--size))
+    calc(8px * var(--size));
+  box-shadow:
+    0 6px 16px rgba(0,0,0,0.55),
+    inset 0 2px 4px rgba(255,255,255,0.10);
+  flex-shrink: 0;
+}
+
+/* Rotating brush strip */
+.vac-brush-indicator {
+  position: absolute;
+  top: 50%;
+  left: calc(10px * var(--size));
+  right: calc(10px * var(--size));
+  height: calc(5px * var(--size));
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(200, 160, 80, 0.70) 0px,
+    rgba(200, 160, 80, 0.70) calc(4px * var(--size)),
+    rgba(80,  100, 160, 0.50) calc(4px * var(--size)),
+    rgba(80,  100, 160, 0.50) calc(8px * var(--size))
+  );
+  border-radius: calc(2px * var(--size));
+  animation: vacBrushSpin 0.4s linear infinite;
+}
+
+/* Suction slot */
+.vac-slot {
+  position: absolute;
+  bottom: calc(4px * var(--size));
+  left:  calc(12px * var(--size));
+  right: calc(12px * var(--size));
+  height: calc(3px * var(--size));
+  background: rgba(0,0,0,0.55);
+  border-radius: calc(2px * var(--size));
+  box-shadow:
+    0 0 calc(5px * var(--size)) rgba(80, 160, 255, calc(var(--glow) * 2));
+}
+
+/* Wheels */
+.vac-wheel {
+  position: absolute;
+  bottom: calc(-5px * var(--size));
+  width:  calc(14px * var(--size));
+  height: calc(14px * var(--size));
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 34%,
+    #6a6e80 0%,
+    #3c4050 55%,
+    #2a2e40 100%
+  );
+  box-shadow:
+    0 3px 8px rgba(0,0,0,0.50),
+    inset 0 1px 2px rgba(255,255,255,0.12);
+}
+
+.vac-wheel-l { left:  calc(8px * var(--size)); }
+.vac-wheel-r { right: calc(8px * var(--size)); }
+
+/* ── Floor glow (suction aura) ── */
+.vac-floor-glow {
+  width:  calc(70px * var(--size));
+  height: calc(8px  * var(--size));
+  background: radial-gradient(
+    ellipse,
+    rgba(80, 160, 255, calc(var(--glow) * 0.9)) 0%,
+    transparent 75%
+  );
+  border-radius: 50%;
+  animation: vacGlowPulse 1.6s ease-in-out infinite alternate;
+}
+
+/* ═══ KEYFRAMES ═══ */
+
+@keyframes vacVibrate {
+  from { transform: translateX(0);              }
+  to   { transform: translateX(calc(1px * var(--size))); }
+}
+
+@keyframes vacLedPulse {
+  from { opacity: 0.75; }
+  to   { opacity: 1.00; }
+}
+
+@keyframes vacDustShift {
+  from { transform: scaleX(0.96) translateX(-1px); opacity: 0.85; }
+  to   { transform: scaleX(1.03) translateX( 1px); opacity: 1.00; }
+}
+
+@keyframes vacBrushSpin {
+  from { background-position: 0 0; }
+  to   { background-position: calc(8px * var(--size)) 0; }
+}
+
+@keyframes vacGlowPulse {
+  from { opacity: 0.50; transform: scaleX(0.90); }
+  to   { opacity: 0.90; transform: scaleX(1.10); }
+}

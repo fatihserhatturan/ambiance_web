@@ -236,6 +236,17 @@ export const SCENE_ASSETS = [
     hasSound: true,
     soundId: 'clock-ticking',
   },
+  {
+    id: 'vacuum',
+    label: 'Elektrikli Süpürge',
+    description: 'Sakin motor uğultusu, odaklanma sesi',
+    icon: 'Zap',
+    category: 'ambiance',
+    categoryLabel: 'Ortam',
+    defaultSettings: { intensity: 0.65, size: 1.0, sound: true },
+    hasSound: true,
+    soundId: 'vacuum-cleaner',
+  },
 ]
 
 // ─── Audio Tracks reference list ──────────────────────────────────────────
@@ -262,4 +273,5 @@ export const AUDIO_TRACKS = [
   { id: 'forest-birds',      label: 'Orman Kuşları',      icon: 'Bird' },
   { id: 'desk-fan',          label: 'Vantilatör',         icon: 'Wind' },
   { id: 'clock-ticking',     label: 'Duvar Saati',        icon: 'Clock' },
+  { id: 'vacuum-cleaner',   label: 'Elektrikli Süpürge', icon: 'Zap' },
 ]

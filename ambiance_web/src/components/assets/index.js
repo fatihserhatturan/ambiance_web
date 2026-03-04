@@ -8,6 +8,7 @@ import Birds      from './Birds'
 import WindChimes from './WindChimes'
 import Fan        from './Fan'
 import Clock      from './Clock'
+import Vacuum     from './Vacuum'
 
 export const ASSET_COMPONENTS = {
   fireplace:     Fireplace,
@@ -19,4 +20,5 @@ export const ASSET_COMPONENTS = {
   'wind-chimes': WindChimes,
   fan:           Fan,
   clock:         Clock,
+  vacuum:        Vacuum,
 }

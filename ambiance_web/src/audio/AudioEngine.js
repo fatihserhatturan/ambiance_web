@@ -13,7 +13,7 @@
  *  ASSET SOUNDS
  *   fireplace-crackle.mp3  rain-window.mp3        thunder-rumble.mp3
  *   stream-water.mp3       wind-chimes.mp3        forest-birds.mp3
- *   desk-fan.mp3           clock-ticking.mp3
+ *   desk-fan.mp3           clock-ticking.mp3      vacuum-cleaner.mp3
  *
  * All files loop seamlessly. Per-channel volume, VU metering, and
  * crossfade between backgrounds work exactly as before.
@@ -29,6 +29,7 @@ const ASSET_SOUND_IDS = new Set([
   'forest-birds',
   'desk-fan',
   'clock-ticking',
+  'vacuum-cleaner',
 ])
 
 const CROSSFADE_DURATION = 2.0 // seconds
