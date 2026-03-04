@@ -56,18 +56,19 @@ export default function SceneAssetRenderer({ asset }) {
       }}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
+      onMouseDown={handleMouseDown}
     >
       {/* Controls tooltip */}
       <div className="asset-controls">
         <div className="asset-label">{asset.label}</div>
-        <button className="asset-remove-btn" onClick={() => removeAsset(asset.instanceId)} title="Remove">
+        <button
+          className="asset-remove-btn"
+          onClick={() => removeAsset(asset.instanceId)}
+          onMouseDown={(e) => e.stopPropagation()}
+          title="Remove"
+        >
           ✕
         </button>
-      </div>
-
-      {/* Drag handle */}
-      <div className="asset-drag-handle" onMouseDown={handleMouseDown} title="Drag to reposition">
-        <span className="drag-icon">⠿</span>
       </div>
 
       {/* The actual asset */}
