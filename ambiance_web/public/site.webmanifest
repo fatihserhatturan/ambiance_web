@@ -1,0 +1,21 @@
+{
+  "name": "Ambiance — Ortam Sesi Tasarlayıcısı",
+  "short_name": "Ambiance",
+  "description": "Kişisel ortam sesi tasarlayıcısı. Doğa sesleri, şehir gürültüsü ve enstrümanları karıştırarak kendi atmosferini oluştur.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
+  "lang": "tr",
+  "dir": "ltr",
+  "orientation": "landscape-primary",
+  "categories": ["entertainment", "music", "productivity"],
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ]
+}
