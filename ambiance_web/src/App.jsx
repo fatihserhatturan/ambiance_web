@@ -1,5 +1,5 @@
-import SceneCanvas from './components/Scene/SceneCanvas'
-import Sidebar from './components/UI/Sidebar'
+import SceneCanvas from './components/scene/SceneCanvas'
+import Sidebar from './components/ui/Sidebar'
 import { useAudioManager } from './hooks/useAudioManager'
 import './App.css'
 
